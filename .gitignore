@@ -17,6 +17,7 @@ packages/*/src/generated/
 .dev.vars.*
 !.dev.vars.example
 wrangler.local.jsonc
+wrangler.prod.jsonc
 
 # test / coverage
 coverage/
@@ -47,3 +48,5 @@ docs/progress.md
 docs/README.md
 # local Claude Code workflow config (skills/rules/agents are internal)
 .claude/
+# local deploy secrets (operator ADMIN_TOKEN)
+.deploy-secrets.local
