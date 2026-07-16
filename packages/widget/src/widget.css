@@ -117,9 +117,19 @@
   border: var(--cq-border-width-hairline) solid var(--cq-color-border-default);
   background: var(--cq-color-bg-surface);
   box-shadow: var(--cq-shadow-md);
+  font-family: inherit;
   font-size: var(--cq-font-size-xs);
   color: var(--cq-color-text-secondary);
-  cursor: default;
+  cursor: pointer;
+}
+
+.cq-fab:hover {
+  background: var(--cq-color-bg-muted);
+}
+
+.cq-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .cq-fab__dot {

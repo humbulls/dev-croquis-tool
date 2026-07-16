@@ -17,9 +17,28 @@ import { buildPageTree, flattenTree } from '../lib/tree';
 type Tab = 'sitemap' | 'content' | 'review' | 'export';
 
 export function ProjectDetail({ projectId, onBack }: { projectId: string; onBack: () => void }) {
-  const { client } = useApp();
+  const { client, notify } = useApp();
   const project = useAsync(() => client.getProject(projectId), [projectId]);
   const [tab, setTab] = useState<Tab>('sitemap');
+
+  const deleteProject = async () => {
+    const name = project.data?.name ?? '';
+    const typed = window.prompt(
+      `This permanently deletes the project, all pages, comments and screenshots.\nType the project name (${name}) to confirm:`,
+    );
+    if (typed === null) return;
+    if (typed.trim() !== name) {
+      notify('Name did not match — nothing deleted', 'error');
+      return;
+    }
+    try {
+      await client.deleteProject(projectId);
+      notify('Project deleted');
+      onBack();
+    } catch (e) {
+      notify(e instanceof Error ? e.message : 'Failed to delete project', 'error');
+    }
+  };
 
   return (
     <>
@@ -30,9 +49,14 @@ export function ProjectDetail({ projectId, onBack }: { projectId: string; onBack
           </button>
           <span class="c-topbar__title">{project.data?.name ?? '…'}</span>
         </div>
-        {project.data && (
-          <span class="u-xs u-muted u-mono">ingest: {project.data.ingest_key}</span>
-        )}
+        <div class="o-cluster">
+          {project.data && (
+            <span class="u-xs u-muted u-mono">ingest: {project.data.ingest_key}</span>
+          )}
+          <button class="c-btn c-btn--danger c-btn--sm" onClick={deleteProject}>
+            Delete project
+          </button>
+        </div>
       </div>
       <div class="o-container o-stack">
         {project.error && <div class="c-empty">Error: {project.error}</div>}
@@ -212,7 +236,9 @@ function ContentTab({ projectId }: { projectId: string }) {
         </select>
       </label>
       {pagesQuery.error && <div class="c-empty">Error: {pagesQuery.error}</div>}
-      {pageId ? (
+      {pagesQuery.loading ? (
+        <div class="c-empty">Loading…</div>
+      ) : pageId ? (
         <ContentBlocks projectId={projectId} pageId={pageId} notify={notify} />
       ) : (
         <div class="c-empty">Add a page first.</div>
@@ -430,24 +456,25 @@ function CommentCard({
           <button class="c-btn c-btn--ghost c-btn--sm" onClick={() => setOpen((v) => !v)}>
             {open ? 'Hide' : 'Details'}
           </button>
-          {comment.status === 'open' && (
-            <button
-              class="c-btn c-btn--sm"
-              onClick={async () => {
-                try {
-                  await client.updateComment(projectId, comment.id, { status: 'resolved' });
-                  onChange();
-                  notify('Resolved');
-                } catch (e) {
-                  notify(e instanceof Error ? e.message : 'Failed to resolve', 'error');
-                }
-              }}
-            >
-              Resolve
-            </button>
-          )}
+          <button
+            class="c-btn c-btn--sm"
+            onClick={async () => {
+              const next = comment.status === 'open' ? 'resolved' : 'open';
+              try {
+                await client.updateComment(projectId, comment.id, { status: next });
+                onChange();
+                notify(next === 'resolved' ? 'Resolved' : 'Reopened');
+              } catch (e) {
+                notify(e instanceof Error ? e.message : 'Failed to update', 'error');
+              }
+            }}
+          >
+            {comment.status === 'open' ? 'Resolve' : 'Reopen'}
+          </button>
         </div>
       </div>
+      {open && detail.loading && <div class="c-empty">Loading…</div>}
+      {open && detail.error && <div class="c-empty">Error: {detail.error}</div>}
       {open && detail.data && (
         <div class="o-stack o-stack--tight">
           {comment.screenshot_key && <Screenshot projectId={projectId} commentId={comment.id} />}
@@ -491,7 +518,10 @@ function CommentCard({
 
 function Screenshot({ projectId, commentId }: { projectId: string; commentId: string }) {
   const { client } = useApp();
-  const [url, setUrl] = useState<string | null>(null);
+  const [state, setState] = useState<{ url: string | null; failed: boolean }>({
+    url: null,
+    failed: false,
+  });
   useEffect(() => {
     let objectUrl: string | null = null;
     let active = true;
@@ -499,19 +529,20 @@ function Screenshot({ projectId, commentId }: { projectId: string; commentId: st
       .fetchScreenshotObjectUrl(projectId, commentId)
       .then((u) => {
         objectUrl = u;
-        if (active) setUrl(u);
+        if (active) setState({ url: u, failed: false });
         else URL.revokeObjectURL(u);
       })
       .catch(() => {
-        if (active) setUrl(null);
+        if (active) setState({ url: null, failed: true });
       });
     return () => {
       active = false;
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
   }, [projectId, commentId]);
-  if (!url) return null;
-  return <img src={url} alt="Screenshot" style={{ borderRadius: 'var(--cq-radius-md)' }} />;
+  if (state.failed) return <p class="c-comment__meta">Screenshot unavailable.</p>;
+  if (!state.url) return null;
+  return <img src={state.url} alt="Screenshot" style={{ borderRadius: 'var(--cq-radius-md)' }} />;
 }
 
 function ExportTab({ projectId }: { projectId: string }) {

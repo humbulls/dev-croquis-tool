@@ -87,7 +87,9 @@ export function App() {
 }
 
 function AuthScreen({ onConnect }: { onConnect: (session: Session) => void }) {
-  const [apiUrl, setApiUrl] = useState('http://localhost:8787');
+  // Dev convenience only — production builds start blank so a deployed
+  // dashboard never points at localhost by default.
+  const [apiUrl, setApiUrl] = useState(import.meta.env.DEV ? 'http://localhost:8787' : '');
   const [token, setToken] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -100,7 +102,15 @@ function AuthScreen({ onConnect }: { onConnect: (session: Session) => void }) {
       await client.listProjects();
       onConnect({ apiUrl: apiUrl.replace(/\/$/, ''), token });
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Connection failed');
+      // A TypeError from fetch means the API was never reached — the two usual
+      // causes are a wrong URL or a CORS lock (DASHBOARD_ORIGIN mismatch).
+      if (e instanceof TypeError) {
+        setError(
+          'Could not reach the API. Check the URL, and make sure the API\'s DASHBOARD_ORIGIN allows this dashboard\'s origin.',
+        );
+      } else {
+        setError(e instanceof Error ? e.message : 'Connection failed');
+      }
     } finally {
       setBusy(false);
     }
@@ -214,13 +224,14 @@ function ProjectList({ onOpen }: { onOpen: (id: string) => void }) {
               value={name}
               placeholder="Project name"
               onInput={(e) => setName((e.target as HTMLInputElement).value)}
-              onKeyDown={(e) => e.key === 'Enter' && create()}
+              // isComposing guard: Enter that confirms an IME conversion must not submit.
+              onKeyDown={(e) => e.key === 'Enter' && !e.isComposing && create()}
             />
             <button class="c-btn c-btn--primary" disabled={busy || !name.trim()} onClick={create}>
               Create
             </button>
           </div>
-          {created && <CreatedProjectReveal project={created} />}
+          {created && <CreatedProjectReveal project={created} onDismiss={() => setCreated(null)} />}
         </div>
 
         {loading && <div class="c-empty">Loading…</div>}
@@ -245,13 +256,48 @@ function ProjectList({ onOpen }: { onOpen: (id: string) => void }) {
   );
 }
 
-function CreatedProjectReveal({ project }: { project: CreatedProject }) {
+function CreatedProjectReveal({
+  project,
+  onDismiss,
+}: {
+  project: CreatedProject;
+  onDismiss: () => void;
+}) {
+  const { notify } = useApp();
+  const rows: { label: string; value: string }[] = [
+    { label: 'API token', value: project.api_token },
+    { label: 'Ingest key', value: project.ingest_key },
+    { label: 'Share slug', value: project.share_slug },
+  ];
   return (
     <div class="o-stack o-stack--tight">
-      <p class="u-sm u-secondary">Store these now — the API token is shown only once.</p>
-      <div class="c-secret">API token: {project.api_token}</div>
-      <div class="c-secret">Ingest key: {project.ingest_key}</div>
-      <div class="c-secret">Share slug: {project.share_slug}</div>
+      <p class="u-sm u-secondary">
+        Store these now — the API token is shown only once and disappears when you leave this
+        screen.
+      </p>
+      {rows.map((row) => (
+        <div key={row.label} class="o-cluster">
+          <div class="c-secret u-grow">
+            {row.label}: {row.value}
+          </div>
+          <button
+            class="c-btn c-btn--sm"
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(row.value);
+                notify(`${row.label} copied`);
+              } catch {
+                notify('Clipboard write failed', 'error');
+              }
+            }}
+          >
+            Copy
+          </button>
+        </div>
+      ))}
+      <button class="c-btn c-btn--ghost c-btn--sm" onClick={onDismiss}>
+        I saved these — dismiss
+      </button>
     </div>
   );
 }

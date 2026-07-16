@@ -24,6 +24,11 @@ function button(className: string, label: string): HTMLButtonElement {
   return b;
 }
 
+/** Coarse-pointer (touch-first) device, e.g. phones and tablets. */
+function isTouchDevice(): boolean {
+  return typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
+}
+
 /** The embeddable feedback widget, fully isolated in a shadow root. */
 export class CroquisWidget {
   private readonly root: ShadowRoot;
@@ -33,10 +38,16 @@ export class CroquisWidget {
   private authorInput!: HTMLInputElement;
   private targetLabel!: HTMLElement;
   private toastEl!: HTMLElement;
+  private fab!: HTMLButtonElement;
+  private sendBtn!: HTMLButtonElement;
+  private cancelBtn!: HTMLButtonElement;
   private metadata: ElementMetadata | null = null;
   private currentTarget: Element | null = null;
   private busy = false;
   private toastTimer: number | null = null;
+  /** Touch fallback: FAB toggles "tap an element to comment" mode. */
+  private tapMode = false;
+  private readonly touch = isTouchDevice();
 
   constructor(private readonly config: WidgetConfig) {
     const host = el('div');
@@ -54,15 +65,22 @@ export class CroquisWidget {
 
     const container = el('div', 'cq-root');
 
-    const fab = el('div', 'cq-fab');
-    fab.appendChild(el('span', 'cq-fab__dot'));
+    this.fab = button('cq-fab', '');
+    this.fab.appendChild(el('span', 'cq-fab__dot'));
     const fabText = el('span');
-    fabText.textContent = 'Croquis · right-click to comment';
-    fab.appendChild(fabText);
+    fabText.textContent = this.touch ? 'Croquis · tap to comment' : 'Croquis · right-click to comment';
+    this.fab.appendChild(fabText);
+    this.fab.title = this.touch
+      ? 'Tap, then tap the element you want to comment on'
+      : 'Right-click any element to comment · Shift+right-click opens the normal browser menu';
+    this.fab.addEventListener('click', () => this.toggleTapMode());
 
     this.overlay = el('div', 'cq-overlay cq-hidden');
 
     this.popover = el('div', 'cq-pop cq-hidden');
+    this.popover.setAttribute('role', 'dialog');
+    this.popover.setAttribute('aria-modal', 'true');
+    this.popover.setAttribute('aria-label', 'Leave a comment');
     const title = el('p', 'cq-pop__title');
     title.textContent = 'Leave a comment';
     this.targetLabel = el('div', 'cq-pop__target');
@@ -77,29 +95,66 @@ export class CroquisWidget {
     if (this.config.author) this.authorInput.value = this.config.author;
 
     const actions = el('div', 'cq-pop__actions');
-    const cancel = button('cq-btn', 'Cancel');
-    const send = button('cq-btn cq-btn--primary', 'Send');
-    cancel.addEventListener('click', () => this.close());
-    send.addEventListener('click', () => void this.submit());
-    actions.append(cancel, send);
+    this.cancelBtn = button('cq-btn', 'Cancel');
+    this.sendBtn = button('cq-btn cq-btn--primary', 'Send');
+    this.cancelBtn.addEventListener('click', () => this.close());
+    this.sendBtn.addEventListener('click', () => void this.submit());
+    actions.append(this.cancelBtn, this.sendBtn);
 
     this.popover.append(title, this.targetLabel, this.textarea, this.authorInput, actions);
 
+    // Simple focus trap: keep Tab cycling inside the dialog while it is open.
+    this.popover.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      const focusables = [this.textarea, this.authorInput, this.cancelBtn, this.sendBtn];
+      const index = focusables.indexOf(this.root.activeElement as (typeof focusables)[number]);
+      if (index === -1) return;
+      e.preventDefault();
+      const next = e.shiftKey
+        ? (index - 1 + focusables.length) % focusables.length
+        : (index + 1) % focusables.length;
+      focusables[next]?.focus();
+    });
+
     this.toastEl = el('div', 'cq-toast cq-hidden');
 
-    container.append(fab, this.overlay, this.popover, this.toastEl);
+    container.append(this.fab, this.overlay, this.popover, this.toastEl);
     this.root.appendChild(container);
   }
 
   private bindEvents(): void {
     document.addEventListener('contextmenu', (e) => this.onContextMenu(e), true);
+    // Touch fallback: while tap mode is armed, the next tap picks the target.
+    document.addEventListener('click', (e) => this.onTapModeClick(e), true);
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') this.close();
+      // Escape that cancels an IME conversion must not close the popover.
+      if (e.key === 'Escape' && !e.isComposing) this.close();
     });
     // Keep the highlight glued to its element while the page scrolls/resizes.
     const track = (): void => this.trackTarget();
     window.addEventListener('scroll', track, { passive: true, capture: true });
     window.addEventListener('resize', track, { passive: true });
+  }
+
+  private toggleTapMode(): void {
+    this.tapMode = !this.tapMode;
+    const label = this.fab.querySelector('span:last-child');
+    if (this.tapMode) {
+      if (label) label.textContent = 'Now tap/click the element to comment on…';
+    } else if (label) {
+      label.textContent = this.touch ? 'Croquis · tap to comment' : 'Croquis · right-click to comment';
+    }
+  }
+
+  private onTapModeClick(event: MouseEvent): void {
+    if (!this.tapMode) return;
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    if (target.closest('[data-croquis-widget]')) return; // taps on our own UI
+    event.preventDefault();
+    event.stopPropagation();
+    this.toggleTapMode(); // disarm
+    this.openFor(target, event.clientX, event.clientY);
   }
 
   private trackTarget(): void {
@@ -116,12 +171,18 @@ export class CroquisWidget {
     if (target.closest('[data-croquis-widget]')) return;
 
     event.preventDefault();
+    this.openFor(target, event.clientX, event.clientY);
+  }
+
+  private openFor(target: Element, x: number, y: number): void {
+    const sameTarget = this.currentTarget === target;
     this.currentTarget = target;
-    this.metadata = collectMetadata(target, event.clientX, event.clientY);
+    this.metadata = collectMetadata(target, x, y);
     this.targetLabel.textContent = this.metadata.element_selector;
-    this.textarea.value = '';
+    // Keep an unsent draft when re-opening on the same element.
+    if (!sameTarget) this.textarea.value = '';
     this.showOverlay(target.getBoundingClientRect());
-    this.showPopover(event.clientX, event.clientY);
+    this.showPopover(x, y);
     this.textarea.focus();
   }
 
@@ -145,10 +206,16 @@ export class CroquisWidget {
   }
 
   private close(): void {
+    if (this.busy) return; // don't allow closing mid-send; state would be ambiguous
     this.popover.classList.add('cq-hidden');
     this.overlay.classList.add('cq-hidden');
     this.metadata = null;
-    this.currentTarget = null;
+  }
+
+  private setSending(sending: boolean): void {
+    this.sendBtn.disabled = sending;
+    this.cancelBtn.disabled = sending;
+    this.sendBtn.textContent = sending ? 'Sending…' : 'Send';
   }
 
   private async submit(): Promise<void> {
@@ -159,6 +226,7 @@ export class CroquisWidget {
       return;
     }
     this.busy = true;
+    this.setSending(true);
     try {
       await postComment(this.config, {
         ...this.metadata,
@@ -169,12 +237,23 @@ export class CroquisWidget {
         body,
         author_name: this.authorInput.value.trim() || null,
       });
+      this.busy = false;
+      this.setSending(false);
+      this.textarea.value = '';
       this.close();
       this.showToast('Comment sent', 'ok');
-    } catch {
-      this.showToast('Failed to send comment', 'error');
-    } finally {
+    } catch (error) {
       this.busy = false;
+      this.setSending(false);
+      // Surface the cause for the site owner's console; keep the toast short.
+      // eslint-disable-next-line no-console
+      console.error('[croquis] failed to send comment:', error);
+      const message = error instanceof Error ? error.message : '';
+      const misconfigured = /(401|403)/.test(message);
+      this.showToast(
+        misconfigured ? 'Feedback widget is misconfigured (invalid key)' : 'Failed to send comment',
+        'error',
+      );
     }
   }
 
