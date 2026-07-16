@@ -1,0 +1,152 @@
+/* Croquis widget styles — injected into a shadow root. Tokens only (--cq-*). */
+
+.cq-root {
+  font-family: var(--cq-font-family-sans);
+  font-size: var(--cq-font-size-sm);
+  line-height: var(--cq-font-leading-normal);
+  color: var(--cq-color-text-primary);
+}
+
+.cq-overlay {
+  position: fixed;
+  z-index: var(--cq-z-widget);
+  pointer-events: none;
+  border: var(--cq-border-width-thick) solid var(--cq-color-accent-default);
+  border-radius: var(--cq-radius-sm);
+  box-shadow: var(--cq-shadow-md);
+  transition: all var(--cq-duration-fast) var(--cq-easing-standard);
+}
+
+.cq-pop {
+  position: fixed;
+  z-index: var(--cq-z-widget);
+  width: var(--cq-size-popover);
+  max-width: 92vw;
+  background: var(--cq-color-bg-surface);
+  border: var(--cq-border-width-hairline) solid var(--cq-color-border-default);
+  border-radius: var(--cq-radius-lg);
+  box-shadow: var(--cq-shadow-lg);
+  padding: var(--cq-space-4);
+  display: grid;
+  gap: var(--cq-space-3);
+}
+
+.cq-pop__title {
+  font-size: var(--cq-font-size-xs);
+  font-weight: var(--cq-font-weight-semibold);
+  color: var(--cq-color-text-secondary);
+  margin: var(--cq-space-0);
+}
+
+.cq-pop__target {
+  font-family: var(--cq-font-family-mono);
+  font-size: var(--cq-font-size-xs);
+  color: var(--cq-color-accent-text);
+  background: var(--cq-color-accent-muted);
+  padding: var(--cq-space-1) var(--cq-space-2);
+  border-radius: var(--cq-radius-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cq-pop__textarea,
+.cq-pop__input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: var(--cq-font-size-sm);
+  color: var(--cq-color-text-primary);
+  background: var(--cq-color-bg-surface);
+  border: var(--cq-border-width-hairline) solid var(--cq-color-border-strong);
+  border-radius: var(--cq-radius-md);
+  padding: var(--cq-space-2) var(--cq-space-3);
+}
+
+.cq-pop__textarea {
+  min-height: var(--cq-space-16);
+  resize: vertical;
+}
+
+.cq-pop__textarea:focus,
+.cq-pop__input:focus {
+  outline: var(--cq-border-width-thick) solid var(--cq-color-border-focus);
+  outline-offset: var(--cq-size-highlight-offset);
+  border-color: var(--cq-color-border-focus);
+}
+
+.cq-pop__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--cq-space-2);
+}
+
+.cq-btn {
+  font-family: inherit;
+  font-size: var(--cq-font-size-sm);
+  font-weight: var(--cq-font-weight-medium);
+  padding: var(--cq-space-2) var(--cq-space-4);
+  border-radius: var(--cq-radius-pill);
+  border: var(--cq-border-width-hairline) solid var(--cq-color-border-default);
+  background: var(--cq-color-bg-surface);
+  color: var(--cq-color-text-primary);
+  cursor: pointer;
+}
+
+.cq-btn--primary {
+  background: var(--cq-color-accent-default);
+  border-color: var(--cq-color-accent-default);
+  color: var(--cq-color-text-on-accent);
+}
+
+.cq-btn--primary:hover {
+  background: var(--cq-color-accent-hover);
+}
+
+.cq-fab {
+  position: fixed;
+  right: var(--cq-space-4);
+  bottom: var(--cq-space-4);
+  z-index: var(--cq-z-widget);
+  display: flex;
+  align-items: center;
+  gap: var(--cq-space-2);
+  height: var(--cq-size-control);
+  padding: var(--cq-space-0) var(--cq-space-4);
+  border-radius: var(--cq-radius-pill);
+  border: var(--cq-border-width-hairline) solid var(--cq-color-border-default);
+  background: var(--cq-color-bg-surface);
+  box-shadow: var(--cq-shadow-md);
+  font-size: var(--cq-font-size-xs);
+  color: var(--cq-color-text-secondary);
+  cursor: default;
+}
+
+.cq-fab__dot {
+  width: var(--cq-space-2);
+  height: var(--cq-space-2);
+  border-radius: var(--cq-radius-pill);
+  background: var(--cq-color-accent-default);
+}
+
+.cq-toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--cq-space-8);
+  transform: translateX(-50%);
+  z-index: var(--cq-z-widget);
+  padding: var(--cq-space-2) var(--cq-space-4);
+  border-radius: var(--cq-radius-pill);
+  box-shadow: var(--cq-shadow-lg);
+  font-size: var(--cq-font-size-sm);
+  color: var(--cq-color-text-on-accent);
+  background: var(--cq-color-text-primary);
+}
+
+.cq-toast--error {
+  background: var(--cq-color-danger-default);
+}
+
+.cq-hidden {
+  display: none;
+}

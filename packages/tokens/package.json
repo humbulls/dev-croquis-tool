@@ -1,0 +1,30 @@
+{
+  "name": "@croquis/tokens",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Croquis design tokens (W3C DTCG) and the generator that emits CSS custom properties + typed TS references.",
+  "license": "AGPL-3.0-or-later",
+  "main": "./dist/tokens.js",
+  "types": "./dist/tokens.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/tokens.d.ts",
+      "import": "./dist/tokens.js"
+    },
+    "./tokens.css": "./dist/tokens.css",
+    "./css": "./dist/tokens.css"
+  },
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "tsx src/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "tsx": "^4.19.2",
+    "vitest": "^4.1.10"
+  }
+}

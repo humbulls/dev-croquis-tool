@@ -1,0 +1,72 @@
+/* Objects: layout primitives (CUBE composition), structure only. */
+
+.o-app {
+  display: grid;
+  grid-template-columns: var(--cq-size-sidebar) 1fr;
+  min-height: 100vh;
+}
+
+@media (max-width: 48rem) {
+  .o-app {
+    grid-template-columns: 1fr;
+  }
+}
+
+.o-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.o-container {
+  width: 100%;
+  max-width: var(--cq-size-container);
+  margin-inline: auto;
+  padding: var(--cq-space-6);
+}
+
+/* Vertical rhythm */
+.o-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cq-space-4);
+}
+
+.o-stack--tight {
+  gap: var(--cq-space-2);
+}
+
+.o-stack--loose {
+  gap: var(--cq-space-6);
+}
+
+/* Horizontal group that wraps */
+.o-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cq-space-3);
+}
+
+.o-cluster--between {
+  justify-content: space-between;
+}
+
+.o-grid {
+  display: grid;
+  gap: var(--cq-space-4);
+  grid-template-columns: repeat(auto-fill, minmax(var(--cq-size-sidebar), 1fr));
+}
+
+.o-split {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: var(--cq-space-6);
+  align-items: start;
+}
+
+@media (max-width: 64rem) {
+  .o-split {
+    grid-template-columns: 1fr;
+  }
+}

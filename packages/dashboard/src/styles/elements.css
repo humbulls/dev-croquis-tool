@@ -1,0 +1,46 @@
+/* Elements: bare element defaults, all from tokens. */
+
+body {
+  font-family: var(--cq-font-family-sans);
+  font-size: var(--cq-font-size-md);
+  line-height: var(--cq-font-leading-normal);
+  color: var(--cq-color-text-primary);
+  background: var(--cq-color-bg-canvas);
+  font-weight: var(--cq-font-weight-regular);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: var(--cq-font-leading-tight);
+  font-weight: var(--cq-font-weight-semibold);
+  color: var(--cq-color-text-primary);
+}
+
+h1 {
+  font-size: var(--cq-font-size-2xl);
+}
+
+h2 {
+  font-size: var(--cq-font-size-xl);
+}
+
+h3 {
+  font-size: var(--cq-font-size-lg);
+}
+
+a:hover {
+  color: var(--cq-color-accent-text);
+}
+
+code,
+pre {
+  font-family: var(--cq-font-family-mono);
+  font-size: var(--cq-font-size-sm);
+}
+
+:focus-visible {
+  outline: var(--cq-border-width-thick) solid var(--cq-color-border-focus);
+  outline-offset: var(--cq-size-highlight-offset);
+}

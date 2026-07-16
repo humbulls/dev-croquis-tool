@@ -1,0 +1,24 @@
+{
+  "name": "@croquis/widget",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Croquis embeddable feedback widget — right-click to comment on any page.",
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "build": "node esbuild.config.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@croquis/shared": "workspace:*",
+    "@croquis/tokens": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "esbuild": "^0.28.0",
+    "jsdom": "^26.0.0",
+    "vitest": "^4.1.10"
+  }
+}

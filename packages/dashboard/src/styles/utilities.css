@@ -1,0 +1,48 @@
+/* Utilities: single-purpose helpers (highest layer, win by cascade order). */
+
+.u-muted {
+  color: var(--cq-color-text-muted);
+}
+
+.u-secondary {
+  color: var(--cq-color-text-secondary);
+}
+
+.u-mono {
+  font-family: var(--cq-font-family-mono);
+}
+
+.u-sm {
+  font-size: var(--cq-font-size-sm);
+}
+
+.u-xs {
+  font-size: var(--cq-font-size-xs);
+}
+
+.u-strong {
+  font-weight: var(--cq-font-weight-semibold);
+}
+
+.u-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.u-grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.u-right {
+  margin-inline-start: auto;
+}
+
+.u-center {
+  text-align: center;
+}
+
+.u-hidden {
+  display: none;
+}

@@ -1,0 +1,28 @@
+{
+  "name": "croquis-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Croquis — AI-native web production platform (sitemap + content + review), MCP-first, Cloudflare-native. OSS.",
+  "license": "AGPL-3.0-or-later",
+  "packageManager": "pnpm@10.33.2",
+  "engines": {
+    "node": ">=22"
+  },
+  "type": "module",
+  "scripts": {
+    "tokens": "pnpm --filter @croquis/tokens build",
+    "build": "pnpm --filter @croquis/tokens build && pnpm -r --workspace-concurrency=1 build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "check:tokens": "node scripts/check-hardcoded-css.mjs",
+    "dev:api": "pnpm --filter @croquis/api dev",
+    "dev:dashboard": "pnpm --filter @croquis/dashboard dev"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "workerd"]
+  }
+}
