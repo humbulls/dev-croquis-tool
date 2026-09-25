@@ -64,13 +64,9 @@ const SHARE_TOKEN_HEADER = 'X-Croquis-Share-Token';
 
 // Optional in the schema so a missing token yields 401 rather than a 422 validation error.
 const shareTokenHeader = z.object({
-  'x-croquis-share-token': z
-    .string()
-    .max(1000)
-    .optional()
-    .openapi({
-      description: 'Share session token from POST /public/share/{slug}/session (required)',
-    }),
+  'x-croquis-share-token': z.string().max(1000).optional().openapi({
+    description: 'Share session token from POST /public/share/{slug}/session (required)',
+  }),
 });
 
 interface GuestRow {

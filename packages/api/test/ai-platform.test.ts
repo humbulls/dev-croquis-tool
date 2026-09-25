@@ -302,9 +302,8 @@ describe('integrations', () => {
       String(u).startsWith('https://hooks.slack.com/'),
     );
     expect(slack).toBeDefined();
-    expect(JSON.parse((slack?.[1] as RequestInit).body as string).text).toContain(
-      'New hero looks great',
-    );
+    const init = (slack as [string, RequestInit])[1];
+    expect(JSON.parse(init.body as string).text).toContain('New hero looks great');
   });
 });
 
