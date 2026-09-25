@@ -71,6 +71,10 @@
   flex: 1;
 }
 
+.o-split--wide {
+  grid-template-columns: minmax(0, 1fr) var(--cq-size-inspector-wide);
+}
+
 .o-split--collapsed {
   grid-template-columns: minmax(0, 1fr);
 }

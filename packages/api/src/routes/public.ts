@@ -15,7 +15,13 @@ import {
   toPublicComment,
   toPublicReply,
 } from '../db/comments';
-import { type ApprovalRow, insertApproval, listContentBlocks, listPages, toApproval } from '../db/pages';
+import {
+  type ApprovalRow,
+  insertApproval,
+  listContentBlocks,
+  listPages,
+  toApproval,
+} from '../db/pages';
 import { listOrigins, type OriginRow, type ShareLinkRow } from '../db/projects';
 import type { AppEnv } from '../env';
 import { background } from '../http/background';
@@ -461,7 +467,9 @@ app.openapi(
     const { link, project } = await loadShareLink(c, c.req.valid('param').slug);
     const origins = await listOrigins(c.env.DB, project.id);
     const site = origins.find((o) => o.environment === 'production') ?? origins[0];
-    const siteUrl = site ? `${site.origin}${site.base_path === '/' ? '/' : `${site.base_path}/`}?croquis=${link.slug}` : null;
+    const siteUrl = site
+      ? `${site.origin}${site.base_path === '/' ? '/' : `${site.base_path}/`}?croquis=${link.slug}`
+      : null;
     return c.json(
       {
         project: { id: project.id, name: project.name, slug: project.slug },
@@ -635,7 +643,10 @@ app.openapi(
     path: '/public/share/{slug}/pages/{pageId}',
     tags,
     summary: 'A page and its content for reviewers',
-    request: { params: SlugParams.extend(idParam('pageId', 'Page id').shape), headers: shareTokenHeader },
+    request: {
+      params: SlugParams.extend(idParam('pageId', 'Page id').shape),
+      headers: shareTokenHeader,
+    },
     responses: { 200: json(S.SharePageDetail, 'The page') },
   }),
   async (c) => {
@@ -656,7 +667,12 @@ app.openapi(
         approval: page.approval,
         purpose: page.purpose,
         audience: page.audience,
-        content_blocks: blocks.map((b) => ({ id: b.id, type: b.type, position: b.position, content: b.content })),
+        content_blocks: blocks.map((b) => ({
+          id: b.id,
+          type: b.type,
+          position: b.position,
+          content: b.content,
+        })),
       },
       200,
     );

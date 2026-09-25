@@ -40,7 +40,6 @@ function Authenticated() {
     <AppShell>
       <ErrorBoundary>
         <Router>
-          <Route path="/" component={() => <Redirect to="/projects" />} />
           <Route path="/projects" component={ProjectsPage} />
           <Route path="/projects/:projectId/:tab?" component={ProjectLayout} />
           <Route path="/settings/workspace" component={WorkspaceSettings} />
@@ -110,7 +109,10 @@ function Routes() {
           </AuthLayout>
         )}
       />
-      <Route default component={Authenticated} />
+      <Route path="/" component={() => <Redirect to="/projects" />} />
+      {/* Nested routers only receive the remainder of a wildcard match. */}
+      <Route path="/*" component={Authenticated} />
+      <Route default component={NotFound} />
     </Router>
   );
 }

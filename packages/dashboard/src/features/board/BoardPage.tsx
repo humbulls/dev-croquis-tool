@@ -1,5 +1,9 @@
 import type { Comment, CommentStatus, Paginated, ProjectWithStats } from '@croquis/client';
 import { COMMENT_STATUSES } from '@croquis/shared/constants';
+
+/** Columns shown on the board; `wont_fix` stays reachable from the inbox filters. */
+const COLUMNS = COMMENT_STATUSES.filter((status) => status !== 'wont_fix');
+
 import { MessageSquareText } from 'lucide-preact';
 import { useState } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
@@ -115,7 +119,7 @@ export function BoardPage({ project }: { project: ProjectWithStats }) {
           </div>
         ) : (
           <div class="c-board">
-            {COMMENT_STATUSES.map((status) => {
+            {COLUMNS.map((status) => {
               const column = items.filter((c) => c.status === status);
               return (
                 <section

@@ -50,3 +50,8 @@ docs/README.md
 .claude/
 # local deploy secrets (operator ADMIN_TOKEN)
 .deploy-secrets.local
+
+# e2e
+e2e/.state/
+test-results/
+playwright-report/

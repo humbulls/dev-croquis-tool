@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Northwind Studio — Websites that ship</title>
+    <meta name="croquis-build" content="demo-2026.09" />
+    <!--
+      A pretend client website for trying Croquis locally and for the E2E tests.
+      Open it with the project's ingest key in the hash:
+        http://localhost:4321/#key=ing_…&api=http://localhost:8787
+      A review link adds ?croquis=<slug> to activate the widget for a reviewer.
+    -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="nav">
+      <a class="logo" href="/">Northwind</a>
+      <nav>
+        <a href="/pricing.html">Pricing</a>
+        <a href="#work">Work</a>
+        <a class="button button--small" href="#contact">Book a call</a>
+      </nav>
+    </header>
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Web studio · Tokyo &amp; Lisbon</p>
+        <h1>Websites your clients approve on the first round.</h1>
+        <p class="lead">We plan the sitemap, write the copy and ship the build — with every piece of feedback in one place.</p>
+        <div class="actions">
+          <a class="button" href="#contact" data-testid="hero-cta">Start a project</a>
+          <a class="button button--ghost" href="#work">See our work</a>
+        </div>
+      </section>
+      <section class="features" id="work">
+        <article class="card">
+          <h2>Strategy</h2>
+          <p>Sitemaps and messaging workshops that get everyone aligned before a single pixel is drawn.</p>
+        </article>
+        <article class="card">
+          <h2>Design &amp; copy</h2>
+          <p>Page-by-page drafts reviewed in context, with text suggestions applied straight to the content.</p>
+        </article>
+        <article class="card">
+          <h2>Build</h2>
+          <p>Fast, accessible sites on modern stacks, with an AI agent fixing feedback between rounds.</p>
+        </article>
+      </section>
+      <section class="quote">
+        <blockquote>“We went from six review rounds to two.”</blockquote>
+        <p>— Aiko Tanaka, Head of Marketing</p>
+      </section>
+      <section class="contact" id="contact">
+        <h2>Tell us about your next launch</h2>
+        <form onsubmit="event.preventDefault()">
+          <label>Email <input type="email" placeholder="you@company.com" /></label>
+          <label>Card number <input type="password" data-croquis-mask value="4242424242424242" /></label>
+          <button class="button" type="submit">Send</button>
+        </form>
+      </section>
+    </main>
+    <footer class="footer">© 2026 Northwind Studio (a fictional company)</footer>
+    <script src="loader.js"></script>
+  </body>
+</html>

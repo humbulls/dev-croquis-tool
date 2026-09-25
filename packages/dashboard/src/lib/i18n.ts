@@ -102,7 +102,7 @@ const en = {
   'projects.empty': 'No projects yet',
   'projects.emptyText':
     'Create a project for a website, install the widget, and share a review link with your client.',
-  'projects.pages': '{count} pages',
+  'projects.pages': '{count} page|{count} pages',
   'projects.open': '{count} open',
   'projects.unassigned': '{count} unmatched',
   'projects.new': 'New project',
@@ -236,14 +236,15 @@ const en = {
   'pages.aiSitemapPlaceholder':
     'A B2B SaaS for dental clinics: online booking, pricing for 3 plans, case studies, blog, and a contact form.',
   'pages.aiGenerated': 'AI draft',
-  'pages.comments': '{count} open comments',
+  'pages.comments': '{count} open comment|{count} open comments',
   'pages.approvals': 'Approvals',
   'pages.noApprovals': 'No decisions yet.',
   'pages.select': 'Select a page to edit its details and content.',
   'pages.deleteConfirm':
     'Delete this page? Child pages move up and its comments return to the inbox.',
   'pages.copyCheck': 'Check copy',
-  'pages.copyCheckDone': '{count} issues found — added to the inbox',
+  'pages.copyCheckDone':
+    '{count} issue found — added to the inbox|{count} issues found — added to the inbox',
   'pages.copyCheckClean': 'No typos or inconsistencies found',
 
   // Share
@@ -415,6 +416,7 @@ const en = {
   'viewer.note': 'Note (optional)',
   'viewer.openSite': 'Open the site to comment on elements',
   'viewer.noComments': 'No comments on this page yet.',
+  'viewer.comments': 'Comments',
   'viewer.reviewingAs': 'Reviewing as {name}',
   'viewer.poweredBy': 'Powered by Croquis',
 
@@ -833,6 +835,7 @@ const ja: Record<MessageKey, string> = {
   'viewer.note': 'メモ（任意）',
   'viewer.openSite': 'サイトを開いて要素にコメントする',
   'viewer.noComments': 'このページにはまだコメントがありません。',
+  'viewer.comments': 'コメント',
   'viewer.reviewingAs': '{name} としてレビュー中',
   'viewer.poweredBy': 'Powered by Croquis',
 
@@ -869,7 +872,14 @@ export function setLocale(next: Locale): void {
 
 /** Translate with `{placeholder}` interpolation. Reading `locale` makes components re-render on change. */
 export function t(key: MessageKey, values: Record<string, string | number> = {}): string {
-  const template = dictionaries[locale.value][key] ?? en[key];
+  let template = dictionaries[locale.value][key] ?? en[key];
+  // "{count} page|{count} pages": pick the plural form for the current language.
+  if (template.includes('|') && typeof values.count === 'number') {
+    const forms = template.split('|');
+    template =
+      (new Intl.PluralRules(locale.value).select(values.count) === 'one' ? forms[0] : forms[1]) ??
+      template;
+  }
   return template.replace(/\{(\w+)\}/g, (_, name: string) => String(values[name] ?? `{${name}}`));
 }
 

@@ -89,7 +89,8 @@ export function useQuery<T>(
   return {
     data: entry?.data.value,
     error: entry?.error.value ?? null,
-    loading: entry ? entry.loading.value && entry.data.value === undefined : false,
+    // Loading until the first answer arrives, so views never flash their empty state.
+    loading: entry ? entry.data.value === undefined && entry.error.value === null : false,
     refetch: () => (entry ? run(entry) : Promise.resolve()),
   };
 }

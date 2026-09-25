@@ -17,7 +17,8 @@ export function h<K extends keyof HTMLElementTagNameMap>(
     if (key === 'class') el.className = String(value);
     else if (key.startsWith('on') && typeof value === 'function') {
       el.addEventListener(key.slice(2).toLowerCase(), value as EventListener);
-    } else if (key in el && typeof value !== 'string') {
+    } else if (key in el) {
+      // Properties, not attributes: a <textarea>'s `value` attribute is ignored.
       (el as unknown as Record<string, unknown>)[key] = value;
     } else {
       el.setAttribute(key, value === true ? '' : String(value));

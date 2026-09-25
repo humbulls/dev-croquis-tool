@@ -54,7 +54,9 @@ export type SharePage = z.infer<typeof sharePageSchema>;
 export const sharePageDetailSchema = sharePageSchema.extend({
   purpose: z.string(),
   audience: z.string(),
-  content_blocks: z.array(contentBlockSchema.pick({ id: true, type: true, position: true, content: true })),
+  content_blocks: z.array(
+    contentBlockSchema.pick({ id: true, type: true, position: true, content: true }),
+  ),
 });
 export type SharePageDetail = z.infer<typeof sharePageDetailSchema>;
 

@@ -1,0 +1,156 @@
+/* A pretend client site (not part of Croquis' design system). */
+:root {
+  --ink: #1b1f24;
+  --muted: #5d6673;
+  --paper: #fbfaf7;
+  --line: #e7e4dc;
+  --accent: #2f6b4f;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.6;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 6vw;
+}
+.nav nav {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  font-size: 15px;
+}
+.logo {
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+}
+.hero {
+  padding: 96px 6vw 72px;
+  max-width: 980px;
+}
+.hero--compact {
+  padding: 64px 6vw 32px;
+}
+.eyebrow {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+h1 {
+  font-size: clamp(36px, 6vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin: 12px 0 20px;
+}
+.lead {
+  font-size: 20px;
+  color: var(--muted);
+  max-width: 640px;
+}
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+}
+.button {
+  display: inline-block;
+  padding: 14px 26px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 600;
+  border: 0;
+  font-size: 15px;
+  cursor: pointer;
+}
+.button--ghost {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.button--small {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  padding: 24px 6vw 64px;
+}
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 28px;
+}
+.card--featured {
+  border-color: var(--accent);
+  box-shadow: 0 12px 32px rgba(47, 107, 79, 0.12);
+}
+.card h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+.card p {
+  margin: 0;
+  color: var(--muted);
+}
+.price {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink) !important;
+  margin: 8px 0 12px !important;
+}
+.quote {
+  padding: 48px 6vw;
+  background: #f1efe8;
+}
+blockquote {
+  font-size: 32px;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+.contact {
+  padding: 64px 6vw;
+}
+.contact form {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: end;
+}
+.contact label {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.contact input {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  font-size: 15px;
+  min-width: 240px;
+}
+.footer {
+  padding: 32px 6vw;
+  color: var(--muted);
+  font-size: 14px;
+  border-top: 1px solid var(--line);
+}

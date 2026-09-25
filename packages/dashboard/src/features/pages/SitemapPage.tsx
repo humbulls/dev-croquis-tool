@@ -625,7 +625,7 @@ export function SitemapPage({ project }: { project: ProjectWithStats }) {
   };
 
   return (
-    <div class={`o-split${selected ? '' : ' o-split--collapsed'}`}>
+    <div class={`o-split o-split--wide${selected ? '' : ' o-split--collapsed'}`}>
       <div>
         <div class="c-toolbar">
           <Button

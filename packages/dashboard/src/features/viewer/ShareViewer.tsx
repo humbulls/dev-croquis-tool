@@ -403,7 +403,7 @@ function PageView({
 
       <section class="o-stack">
         <div class="o-cluster o-cluster--between">
-          <h3>{t('nav.inbox')}</h3>
+          <h3>{t('viewer.comments')}</h3>
           {meta.site_url ? (
             <a
               class={buttonClass('secondary', 'sm')}

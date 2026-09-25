@@ -260,3 +260,14 @@ describe('widget', () => {
     expect(location.search).toBe('');
   });
 });
+
+describe('dom helper', () => {
+  it('sets textarea values as properties', async () => {
+    const { h } = await import('../src/ui/dom');
+    const area = h('textarea', { value: 'Hello', rows: 2 });
+    expect(area.value).toBe('Hello');
+    const input = h('input', { value: 'Name', 'aria-label': 'x' });
+    expect(input.value).toBe('Name');
+    expect(input.getAttribute('aria-label')).toBe('x');
+  });
+});

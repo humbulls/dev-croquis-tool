@@ -2,7 +2,7 @@
   "name": "croquis-monorepo",
   "version": "0.0.0",
   "private": true,
-  "description": "Croquis — AI-native web production platform (sitemap + content + review), MCP-first, Cloudflare-native. OSS.",
+  "description": "Croquis \u2014 AI-native web production platform (sitemap + content + review), MCP-first, Cloudflare-native. OSS.",
   "license": "AGPL-3.0-or-later",
   "packageManager": "pnpm@10.33.2",
   "engines": {
@@ -18,10 +18,13 @@
     "check:tokens": "node scripts/check-hardcoded-css.mjs",
     "dev:api": "pnpm --filter @croquis/api dev",
     "dev:dashboard": "pnpm --filter @croquis/dashboard dev",
-    "format": "biome check --write ."
+    "format": "biome check --write .",
+    "e2e": "playwright test",
+    "e2e:screenshots": "UPDATE_SCREENSHOTS=1 playwright test"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
+    "@playwright/test": "^1.58.2",
     "typescript": "^6.0.3"
   },
   "pnpm": {

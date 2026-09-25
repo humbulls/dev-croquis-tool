@@ -1,9 +1,26 @@
 # Copy to .dev.vars for local development (git-ignored).
-# The operator/admin bearer token used by the dashboard.
+
+# Required: signs sessions and share tokens. Generate with `openssl rand -hex 32`.
+AUTH_SECRET=replace-with-64-random-hex-characters
+
+# Required once: proves you operate this instance when creating the first owner at /setup.
 ADMIN_TOKEN=dev-admin-token-change-me
 
-# Optional: enable AI generation endpoints (one key is enough).
+# Optional: who may sign up — invite (default) or open.
+# SIGNUP_MODE=invite
+
+# Optional AI provider. Without a key, the Workers AI binding is used (it needs `wrangler login`).
 # ANTHROPIC_API_KEY=sk-ant-...
 # OPENAI_API_KEY=sk-...
-# AI_PROVIDER=anthropic   # or: openai (default: first key found)
-# AI_MODEL=claude-sonnet-5  # or e.g. gpt-5-mini
+# AI_PROVIDER=anthropic      # anthropic | openai | workers-ai | none
+# AI_MODEL=claude-sonnet-5
+
+# Optional: social sign-in, transactional email, bot protection.
+# GITHUB_CLIENT_ID=...
+# GITHUB_CLIENT_SECRET=...
+# GOOGLE_CLIENT_ID=...
+# GOOGLE_CLIENT_SECRET=...
+# RESEND_API_KEY=re_...
+# EMAIL_FROM="Croquis <croquis@example.com>"
+# TURNSTILE_SITE_KEY=...
+# TURNSTILE_SECRET=...
