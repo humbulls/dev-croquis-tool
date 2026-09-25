@@ -15,7 +15,7 @@ import {
   toPublicComment,
   toPublicReply,
 } from '../db/comments';
-import { type ApprovalRow, insertApproval, listPages, toApproval } from '../db/pages';
+import { type ApprovalRow, insertApproval, listContentBlocks, listPages, toApproval } from '../db/pages';
 import { listOrigins, type OriginRow, type ShareLinkRow } from '../db/projects';
 import type { AppEnv } from '../env';
 import { background } from '../http/background';
@@ -459,6 +459,9 @@ app.openapi(
   async (c) => {
     await rateLimit(c, 'share');
     const { link, project } = await loadShareLink(c, c.req.valid('param').slug);
+    const origins = await listOrigins(c.env.DB, project.id);
+    const site = origins.find((o) => o.environment === 'production') ?? origins[0];
+    const siteUrl = site ? `${site.origin}${site.base_path === '/' ? '/' : `${site.base_path}/`}?croquis=${link.slug}` : null;
     return c.json(
       {
         project: { id: project.id, name: project.name, slug: project.slug },
@@ -466,6 +469,7 @@ app.openapi(
         password_required: link.password_hash !== null,
         allow_comments: link.allow_comments === 1,
         allow_approvals: link.allow_approvals === 1,
+        site_url: siteUrl,
       },
       200,
     );
@@ -622,6 +626,40 @@ app.openapi(
       .bind(...params)
       .all<CommentListRow>();
     return c.json({ data: (await hydrate(c.env.DB, results)).map(toPublicComment) }, 200);
+  },
+);
+
+app.openapi(
+  publicRoute({
+    method: 'get',
+    path: '/public/share/{slug}/pages/{pageId}',
+    tags,
+    summary: 'A page and its content for reviewers',
+    request: { params: SlugParams.extend(idParam('pageId', 'Page id').shape), headers: shareTokenHeader },
+    responses: { 200: json(S.SharePageDetail, 'The page') },
+  }),
+  async (c) => {
+    const { slug, pageId } = c.req.valid('param');
+    const { project } = await requireShareSession(c, slug);
+    const page = (await listPages(c.env.DB, project.id)).find((p) => p.id === pageId);
+    if (!page) throw notFound('page');
+    const blocks = await listContentBlocks(c.env.DB, pageId);
+    return c.json(
+      {
+        id: page.id,
+        parent_id: page.parent_id,
+        path: page.path,
+        title: page.title,
+        status: page.status,
+        sort_index: page.sort_index,
+        comments_active: page.comments_active,
+        approval: page.approval,
+        purpose: page.purpose,
+        audience: page.audience,
+        content_blocks: blocks.map((b) => ({ id: b.id, type: b.type, position: b.position, content: b.content })),
+      },
+      200,
+    );
   },
 );
 

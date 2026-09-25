@@ -1,17 +1,23 @@
-import type { Page } from '@croquis/shared';
+/** Minimal shape needed to arrange pages into a tree. */
+export interface TreeItem {
+  id: string;
+  parent_id: string | null;
+  sort_index: number;
+  created_at?: number;
+}
 
-export interface PageNode {
-  page: Page;
+export interface PageNode<T extends TreeItem = TreeItem> {
+  page: T;
   depth: number;
-  children: PageNode[];
+  children: PageNode<T>[];
 }
 
 /** Build a hierarchy of pages from a flat list (via parent_id). */
-export function buildPageTree(pages: Page[]): PageNode[] {
-  const byId = new Map<string, PageNode>();
+export function buildPageTree<T extends TreeItem>(pages: T[]): PageNode<T>[] {
+  const byId = new Map<string, PageNode<T>>();
   for (const page of pages) byId.set(page.id, { page, depth: 0, children: [] });
 
-  const roots: PageNode[] = [];
+  const roots: PageNode<T>[] = [];
   for (const node of byId.values()) {
     const parentId = node.page.parent_id;
     const parent = parentId ? byId.get(parentId) : undefined;
@@ -23,7 +29,7 @@ export function buildPageTree(pages: Page[]): PageNode[] {
   // get their cycle edge broken and are promoted to roots instead of
   // silently disappearing from the tree.
   const reachable = new Set<string>();
-  const mark = (nodes: PageNode[]): void => {
+  const mark = (nodes: PageNode<T>[]): void => {
     for (const node of nodes) {
       if (reachable.has(node.page.id)) continue;
       reachable.add(node.page.id);
@@ -39,12 +45,14 @@ export function buildPageTree(pages: Page[]): PageNode[] {
     mark([node]);
   }
 
-  const sortNodes = (nodes: PageNode[]): void => {
+  const sortNodes = (nodes: PageNode<T>[]): void => {
     nodes.sort(
-      (a, b) => a.page.sort_index - b.page.sort_index || a.page.created_at - b.page.created_at,
+      (a, b) =>
+        a.page.sort_index - b.page.sort_index ||
+        (a.page.created_at ?? 0) - (b.page.created_at ?? 0),
     );
   };
-  const assignDepth = (nodes: PageNode[], depth: number): void => {
+  const assignDepth = (nodes: PageNode<T>[], depth: number): void => {
     sortNodes(nodes);
     for (const node of nodes) {
       node.depth = depth;
@@ -56,9 +64,9 @@ export function buildPageTree(pages: Page[]): PageNode[] {
 }
 
 /** Depth-first flatten to a render-ready list preserving order and depth. */
-export function flattenTree(nodes: PageNode[]): PageNode[] {
-  const out: PageNode[] = [];
-  const walk = (list: PageNode[]): void => {
+export function flattenTree<T extends TreeItem>(nodes: PageNode<T>[]): PageNode<T>[] {
+  const out: PageNode<T>[] = [];
+  const walk = (list: PageNode<T>[]): void => {
     for (const node of list) {
       out.push(node);
       walk(node.children);

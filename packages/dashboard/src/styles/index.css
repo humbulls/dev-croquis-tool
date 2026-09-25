@@ -1,12 +1,19 @@
 /*
- * Croquis dashboard styles — ITCSS layers via CSS @layer, BEM naming,
- * CUBE-style composition. Every value is a --cq-* token (enforced by
- * scripts/check-hardcoded-css.mjs). Generated tokens are imported first.
+ * Croquis dashboard — ITCSS layers (generic → elements → objects →
+ * components → utilities) with BEM names: `.o-*` layout objects,
+ * `.c-*` components, `.u-*` utilities, `is-*` states. Every design value
+ * comes from a --cq-* token; `pnpm check:tokens` fails on raw values.
  */
-/* Layer precedence is established by import order below (generic … utilities). */
+@layer generic, elements, objects, components, utilities;
+
 @import "@croquis/tokens/tokens.css";
 @import "./generic.css" layer(generic);
 @import "./elements.css" layer(elements);
 @import "./objects.css" layer(objects);
-@import "./components.css" layer(components);
+@import "./components/controls.css" layer(components);
+@import "./components/display.css" layer(components);
+@import "./components/overlays.css" layer(components);
+@import "./components/shell.css" layer(components);
+@import "./components/review.css" layer(components);
+@import "./components/production.css" layer(components);
 @import "./utilities.css" layer(utilities);

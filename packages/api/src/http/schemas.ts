@@ -77,6 +77,7 @@ export const ShareMeta = named('ShareMeta', s.shareMetaSchema);
 export const ShareSessionInput = named('ShareSessionInput', s.shareSessionInput);
 export const ShareSession = named('ShareSession', s.shareSessionSchema);
 export const SharePage = named('SharePage', s.sharePageSchema);
+export const SharePageDetail = named('SharePageDetail', s.sharePageDetailSchema);
 export const ShareCommentDetail = named('ShareCommentDetail', s.shareCommentDetailSchema);
 export const ShareReplyInput = named('ShareReplyInput', s.shareReplyInput);
 export const ShareCommentInput = named('ShareCommentInput', s.shareCommentInput);

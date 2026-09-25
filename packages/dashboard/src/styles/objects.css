@@ -1,72 +1,99 @@
-/* Objects: layout primitives (CUBE composition), structure only. */
+/* Layout primitives (no cosmetics): compose them, then add components. */
 
-.o-app {
-  display: grid;
-  grid-template-columns: var(--cq-size-sidebar) 1fr;
-  min-height: 100vh;
-}
-
-@media (max-width: 48rem) {
-  .o-app {
-    grid-template-columns: 1fr;
-  }
-}
-
-.o-main {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.o-container {
-  width: 100%;
-  max-width: var(--cq-size-container);
-  margin-inline: auto;
-  padding: var(--cq-space-6);
-}
-
-/* Vertical rhythm */
 .o-stack {
   display: flex;
   flex-direction: column;
   gap: var(--cq-space-4);
 }
 
-.o-stack--tight {
+.o-stack--xs {
+  gap: var(--cq-space-1);
+}
+
+.o-stack--sm {
   gap: var(--cq-space-2);
 }
 
-.o-stack--loose {
+.o-stack--lg {
   gap: var(--cq-space-6);
 }
 
-/* Horizontal group that wraps */
+.o-stack--xl {
+  gap: var(--cq-space-10);
+}
+
 .o-cluster {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--cq-space-3);
+  gap: var(--cq-space-2);
+}
+
+.o-cluster--lg {
+  gap: var(--cq-space-4);
 }
 
 .o-cluster--between {
   justify-content: space-between;
 }
 
+.o-cluster--nowrap {
+  flex-wrap: nowrap;
+}
+
 .o-grid {
   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--cq-size-board-column)), 1fr));
   gap: var(--cq-space-4);
-  grid-template-columns: repeat(auto-fill, minmax(var(--cq-size-sidebar), 1fr));
+}
+
+.o-container {
+  width: 100%;
+  max-width: var(--cq-size-container);
+  margin-inline: auto;
+  padding-inline: var(--cq-space-8);
+}
+
+.o-container--prose {
+  max-width: var(--cq-size-prose);
+}
+
+.o-app {
+  display: grid;
+  grid-template-columns: var(--cq-size-sidebar) minmax(0, 1fr);
+  min-height: 100vh;
 }
 
 .o-split {
   display: grid;
-  grid-template-columns: 2fr 3fr;
-  gap: var(--cq-space-6);
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr) var(--cq-size-inspector);
+  min-height: 0;
+  flex: 1;
+}
+
+.o-split--collapsed {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.o-center {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: var(--cq-space-6);
 }
 
 @media (max-width: 64rem) {
   .o-split {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 48rem) {
+  .o-app {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .o-container {
+    padding-inline: var(--cq-space-4);
   }
 }

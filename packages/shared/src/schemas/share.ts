@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { FIELD_LIMITS } from '../constants';
 import { publicCommentSchema, publicReplySchema } from './comment';
 import { epochMs, id } from './common';
-import { approvalDecisionSchema, pageStatusSchema } from './page';
+import { approvalDecisionSchema, contentBlockSchema, pageStatusSchema } from './page';
 import { publicProjectSchema } from './project';
 
 /** GET /public/share/:slug — enough to render the gate. */
@@ -12,6 +12,8 @@ export const shareMetaSchema = z.object({
   password_required: z.boolean(),
   allow_comments: z.boolean(),
   allow_approvals: z.boolean(),
+  /** The reviewed site with the widget activated for this link (`?croquis=<slug>`), when an origin is registered. */
+  site_url: z.string().nullable(),
 });
 export type ShareMeta = z.infer<typeof shareMetaSchema>;
 
@@ -47,6 +49,14 @@ export const sharePageSchema = z.object({
   approval: approvalDecisionSchema.nullable(),
 });
 export type SharePage = z.infer<typeof sharePageSchema>;
+
+/** GET /public/share/:slug/pages/:id — a page and its drafted content, read-only. */
+export const sharePageDetailSchema = sharePageSchema.extend({
+  purpose: z.string(),
+  audience: z.string(),
+  content_blocks: z.array(contentBlockSchema.pick({ id: true, type: true, position: true, content: true })),
+});
+export type SharePageDetail = z.infer<typeof sharePageDetailSchema>;
 
 export const shareCommentDetailSchema = publicCommentSchema.extend({
   replies: z.array(publicReplySchema),

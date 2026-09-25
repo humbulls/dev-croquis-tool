@@ -1,46 +1,70 @@
-/* Elements: bare element defaults, all from tokens. */
-
-body {
+html {
   font-family: var(--cq-font-family-sans);
-  font-size: var(--cq-font-size-md);
+  font-size: 100%;
   line-height: var(--cq-font-leading-normal);
   color: var(--cq-color-text-primary);
   background: var(--cq-color-bg-canvas);
-  font-weight: var(--cq-font-weight-regular);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-h1,
-h2,
-h3,
-h4 {
-  line-height: var(--cq-font-leading-tight);
-  font-weight: var(--cq-font-weight-semibold);
-  color: var(--cq-color-text-primary);
+body {
+  min-height: 100vh;
+  font-size: var(--cq-font-size-md);
 }
 
 h1 {
   font-size: var(--cq-font-size-2xl);
+  font-weight: var(--cq-font-weight-bold);
+  line-height: var(--cq-font-leading-tight);
+  letter-spacing: var(--cq-font-tracking-tight);
 }
 
 h2 {
   font-size: var(--cq-font-size-xl);
+  font-weight: var(--cq-font-weight-semibold);
+  line-height: var(--cq-font-leading-tight);
 }
 
 h3 {
   font-size: var(--cq-font-size-lg);
+  font-weight: var(--cq-font-weight-semibold);
+  line-height: var(--cq-font-leading-snug);
+}
+
+h4 {
+  font-size: var(--cq-font-size-md);
+  font-weight: var(--cq-font-weight-semibold);
+}
+
+a {
+  color: var(--cq-color-text-link);
+  text-decoration: none;
 }
 
 a:hover {
-  color: var(--cq-color-accent-text);
+  text-decoration: underline;
+  text-underline-offset: var(--cq-space-0-5);
 }
 
 code,
+kbd,
 pre {
   font-family: var(--cq-font-family-mono);
   font-size: var(--cq-font-size-sm);
 }
 
 :focus-visible {
-  outline: var(--cq-border-width-thick) solid var(--cq-color-border-focus);
-  outline-offset: var(--cq-size-highlight-offset);
+  outline: none;
+  box-shadow: var(--cq-shadow-focus);
+  border-radius: var(--cq-radius-sm);
+}
+
+::selection {
+  background: var(--cq-color-accent-muted);
+}
+
+hr {
+  border: none;
+  border-top: var(--cq-border-width-hairline) solid var(--cq-color-border-subtle);
 }

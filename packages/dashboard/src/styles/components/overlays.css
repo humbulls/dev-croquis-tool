@@ -1,0 +1,164 @@
+/* Menus / popovers ------------------------------------------------------- */
+.c-menu-anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+.c-menu {
+  position: absolute;
+  top: calc(100% + var(--cq-space-1));
+  left: 0;
+  z-index: var(--cq-z-dropdown);
+  display: grid;
+  min-width: var(--cq-space-20);
+  max-width: var(--cq-size-popover);
+  max-height: min(70vh, var(--cq-size-inspector));
+  overflow: auto;
+  padding: var(--cq-space-1);
+  border: var(--cq-border-width-hairline) solid var(--cq-color-border-default);
+  border-radius: var(--cq-radius-lg);
+  background: var(--cq-color-bg-raised);
+  box-shadow: var(--cq-shadow-lg);
+  animation: c-pop var(--cq-duration-fast) var(--cq-easing-standard);
+}
+
+.c-menu--right {
+  left: auto;
+  right: 0;
+}
+
+.c-menu--up {
+  top: auto;
+  bottom: calc(100% + var(--cq-space-1));
+}
+
+.c-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--cq-space-2);
+  min-height: var(--cq-size-control-sm);
+  padding: var(--cq-space-1) var(--cq-space-2);
+  border-radius: var(--cq-radius-sm);
+  color: var(--cq-color-text-primary);
+  font-size: var(--cq-font-size-sm);
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.c-menu__item:hover,
+.c-menu__item:focus-visible {
+  background: var(--cq-color-bg-hover);
+  text-decoration: none;
+  box-shadow: none;
+}
+
+.c-menu__item.is-selected {
+  color: var(--cq-color-accent-text);
+  font-weight: var(--cq-font-weight-medium);
+}
+
+.c-menu__item--danger {
+  color: var(--cq-color-danger-text);
+}
+
+.c-menu__heading {
+  padding: var(--cq-space-1-5) var(--cq-space-2) var(--cq-space-1);
+  color: var(--cq-color-text-muted);
+  font-size: var(--cq-font-size-2xs);
+  font-weight: var(--cq-font-weight-semibold);
+  letter-spacing: var(--cq-font-tracking-wide);
+  text-transform: uppercase;
+}
+
+.c-menu__separator {
+  margin: var(--cq-space-1) 0;
+  border: none;
+  border-top: var(--cq-border-width-hairline) solid var(--cq-color-border-subtle);
+}
+
+@keyframes c-pop {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--cq-space-1) * -1));
+  }
+}
+
+/* Modal dialog ------------------------------------------------------------ */
+.c-modal {
+  width: min(calc(100vw - var(--cq-space-8)), var(--cq-size-prose));
+  max-height: calc(100vh - var(--cq-space-16));
+  border: var(--cq-border-width-hairline) solid var(--cq-color-border-default);
+  border-radius: var(--cq-radius-2xl);
+  background: var(--cq-color-bg-raised);
+  color: var(--cq-color-text-primary);
+  box-shadow: var(--cq-shadow-lg);
+}
+
+.c-modal::backdrop {
+  background: var(--cq-color-bg-scrim);
+}
+
+.c-modal[open] {
+  animation: c-pop var(--cq-duration-base) var(--cq-easing-standard);
+}
+
+.c-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cq-space-3);
+  padding: var(--cq-space-5) var(--cq-space-6) var(--cq-space-2);
+}
+
+.c-modal__body {
+  display: grid;
+  gap: var(--cq-space-4);
+  padding: var(--cq-space-3) var(--cq-space-6) var(--cq-space-5);
+}
+
+.c-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--cq-space-2);
+  padding: var(--cq-space-4) var(--cq-space-6);
+  border-top: var(--cq-border-width-hairline) solid var(--cq-color-border-subtle);
+  background: var(--cq-color-bg-muted);
+  border-radius: 0 0 var(--cq-radius-2xl) var(--cq-radius-2xl);
+}
+
+/* Toasts -------------------------------------------------------------------- */
+.c-toasts {
+  position: fixed;
+  right: var(--cq-space-6);
+  bottom: var(--cq-space-6);
+  z-index: var(--cq-z-toast);
+  display: grid;
+  gap: var(--cq-space-2);
+  width: min(calc(100vw - var(--cq-space-8)), var(--cq-size-popover));
+}
+
+.c-toast {
+  display: flex;
+  align-items: center;
+  gap: var(--cq-space-3);
+  padding: var(--cq-space-3) var(--cq-space-4);
+  border-radius: var(--cq-radius-lg);
+  background: var(--cq-color-bg-inverted);
+  color: var(--cq-color-text-inverted);
+  box-shadow: var(--cq-shadow-lg);
+  font-size: var(--cq-font-size-sm);
+  animation: c-pop var(--cq-duration-base) var(--cq-easing-standard);
+}
+
+.c-toast--error {
+  background: var(--cq-color-danger-default);
+  color: var(--cq-color-text-on-accent);
+}
+
+.c-toast__action {
+  margin-left: auto;
+  color: inherit;
+  font-weight: var(--cq-font-weight-semibold);
+  text-decoration: underline;
+}

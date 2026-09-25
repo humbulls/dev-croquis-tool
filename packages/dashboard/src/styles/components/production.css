@@ -1,0 +1,181 @@
+/* Sitemap tree -------------------------------------------------------------- */
+.c-tree {
+  display: grid;
+  padding: var(--cq-space-2);
+}
+
+.c-tree__row {
+  display: flex;
+  align-items: center;
+  gap: var(--cq-space-2);
+  min-height: var(--cq-size-control);
+  padding: var(--cq-space-1) var(--cq-space-2);
+  padding-left: calc(var(--cq-space-2) + var(--cq-space-5) * var(--depth, 0));
+  border-radius: var(--cq-radius-md);
+  color: inherit;
+  text-align: left;
+  width: 100%;
+}
+
+.c-tree__row:hover {
+  background: var(--cq-color-bg-hover);
+}
+
+.c-tree__row.is-selected {
+  background: var(--cq-color-bg-selected);
+}
+
+.c-tree__row.is-drop-target {
+  box-shadow: inset 0 0 0 var(--cq-border-width-thick) var(--cq-color-accent-default);
+}
+
+.c-tree__toggle {
+  display: grid;
+  place-items: center;
+  width: var(--cq-size-icon-lg);
+  height: var(--cq-size-icon-lg);
+  flex: none;
+  border-radius: var(--cq-radius-xs);
+  color: var(--cq-color-text-muted);
+}
+
+.c-tree__toggle:hover {
+  background: var(--cq-color-bg-active);
+}
+
+.c-tree__title {
+  font-size: var(--cq-font-size-md);
+  font-weight: var(--cq-font-weight-medium);
+}
+
+.c-tree__path {
+  color: var(--cq-color-text-muted);
+  font-family: var(--cq-font-family-mono);
+  font-size: var(--cq-font-size-xs);
+}
+
+.c-tree__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--cq-space-2);
+  margin-left: auto;
+  color: var(--cq-color-text-muted);
+  font-size: var(--cq-font-size-xs);
+}
+
+/* Content blocks editor --------------------------------------------------------- */
+.c-blocks {
+  display: grid;
+  gap: var(--cq-space-2);
+}
+
+.c-block {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--cq-space-3);
+  align-items: start;
+  padding: var(--cq-space-2) var(--cq-space-3);
+  border: var(--cq-border-width-hairline) solid transparent;
+  border-radius: var(--cq-radius-lg);
+}
+
+.c-block:hover,
+.c-block:focus-within {
+  border-color: var(--cq-color-border-subtle);
+  background: var(--cq-color-bg-surface);
+}
+
+.c-block__type {
+  min-width: var(--cq-space-12);
+  padding-top: var(--cq-space-1-5);
+  color: var(--cq-color-text-muted);
+  font-size: var(--cq-font-size-2xs);
+  font-weight: var(--cq-font-weight-semibold);
+  letter-spacing: var(--cq-font-tracking-wide);
+  text-transform: uppercase;
+}
+
+.c-block__content {
+  width: 100%;
+  min-height: var(--cq-size-control);
+  padding: var(--cq-space-1) 0;
+  border: none;
+  background: transparent;
+  font-size: var(--cq-font-size-md);
+  line-height: var(--cq-font-leading-relaxed);
+  resize: none;
+  field-sizing: content;
+  outline: none;
+}
+
+.c-block__content--heading {
+  font-size: var(--cq-font-size-xl);
+  font-weight: var(--cq-font-weight-semibold);
+  line-height: var(--cq-font-leading-tight);
+}
+
+.c-block__actions {
+  display: flex;
+  gap: var(--cq-space-1);
+  opacity: 0;
+  transition: opacity var(--cq-duration-fast) var(--cq-easing-standard);
+}
+
+.c-block:hover .c-block__actions,
+.c-block:focus-within .c-block__actions {
+  opacity: 1;
+}
+
+.c-ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cq-space-1);
+  color: var(--cq-color-accent-text);
+  font-size: var(--cq-font-size-2xs);
+  font-weight: var(--cq-font-weight-semibold);
+}
+
+/* Share viewer (client-facing) --------------------------------------------------- */
+.c-viewer {
+  display: grid;
+  grid-template-columns: var(--cq-size-sidebar) minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.c-viewer__nav {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: var(--cq-space-5) var(--cq-space-3);
+  border-right: var(--cq-border-width-hairline) solid var(--cq-color-border-subtle);
+  background: var(--cq-color-bg-sidebar);
+  overflow-y: auto;
+}
+
+.c-viewer__main {
+  padding: var(--cq-space-10) 0 var(--cq-space-16);
+}
+
+.c-approval {
+  display: flex;
+  align-items: center;
+  gap: var(--cq-space-3);
+  flex-wrap: wrap;
+  padding: var(--cq-space-4) var(--cq-space-5);
+  border: var(--cq-border-width-hairline) solid var(--cq-color-border-default);
+  border-radius: var(--cq-radius-xl);
+  background: var(--cq-color-bg-raised);
+}
+
+@media (max-width: 48rem) {
+  .c-viewer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .c-viewer__nav {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: var(--cq-border-width-hairline) solid var(--cq-color-border-subtle);
+  }
+}

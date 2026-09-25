@@ -1,11 +1,12 @@
-/* Generic: minimal reset. Only 0 / unitless / % — no design values. */
-
+/* Modern reset: predictable box model, no default margins, media behaves. */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+* {
   margin: 0;
-  padding: 0;
 }
 
 html {
@@ -13,29 +14,49 @@ html {
   text-size-adjust: 100%;
 }
 
-body {
-  min-height: 100vh;
-}
-
 img,
-svg {
+svg,
+video,
+canvas {
   display: block;
   max-width: 100%;
 }
 
-button,
 input,
+button,
 textarea,
 select {
   font: inherit;
   color: inherit;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
-ul {
+p,
+h1,
+h2,
+h3,
+h4 {
+  overflow-wrap: break-word;
+}
+
+ul[role="list"],
+ol[role="list"] {
   list-style: none;
+  padding: 0;
+}
+
+dialog {
+  padding: 0;
+  border: none;
+}
+
+[hidden] {
+  /* biome-ignore lint/complexity/noImportantStyles: `hidden` must beat component display rules */
+  display: none !important;
 }
