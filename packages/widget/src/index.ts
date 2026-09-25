@@ -1,23 +1,29 @@
 import { resolveConfig } from './config';
-import { CroquisWidget } from './ui';
+import { CroquisWidget } from './widget';
 
-const scriptEl =
+declare global {
+  interface Window {
+    __croquisWidget?: CroquisWidget;
+  }
+}
+
+const script =
   (document.currentScript as HTMLScriptElement | null) ??
-  document.querySelector<HTMLScriptElement>('script[data-croquis-ingest-key]');
-
-const config = resolveConfig(scriptEl);
+  document.querySelector<HTMLScriptElement>(
+    'script[data-croquis-key], script[data-croquis-ingest-key]',
+  );
 
 function start(): void {
+  if (window.__croquisWidget) return;
+  const config = resolveConfig(script);
   if (!config) {
-    // eslint-disable-next-line no-console
-    console.warn('[croquis] missing data-croquis-api / data-croquis-ingest-key');
+    console.warn('[croquis] Add data-croquis-key="ing_…" to the widget <script> tag.');
     return;
   }
-  new CroquisWidget(config);
+  window.__croquisWidget = new CroquisWidget(config);
+  void window.__croquisWidget.start();
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', start);
-} else {
-  start();
-}
+if (document.readyState === 'loading')
+  document.addEventListener('DOMContentLoaded', start, { once: true });
+else start();

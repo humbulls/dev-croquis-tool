@@ -17,7 +17,13 @@ const documents = SOURCES.map((rel) => {
   return JSON.parse(readFileSync(abs, 'utf8')) as Record<string, unknown>;
 });
 
-const { css, js, dts, tokens } = generate(documents);
+const dark = JSON.parse(
+  readFileSync(resolve(root, 'src/semantic.dark.tokens.json'), 'utf8'),
+) as Record<string, unknown>;
+
+const { css, js, dts, tokens } = generate(documents, {
+  themes: [{ name: 'dark', document: dark, media: '(prefers-color-scheme: dark)' }],
+});
 
 const distDir = resolve(root, 'dist');
 mkdirSync(distDir, { recursive: true });

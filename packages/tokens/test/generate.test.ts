@@ -78,3 +78,35 @@ describe('generate', () => {
     ).toThrow(/Duplicate token/);
   });
 });
+
+describe('themes', () => {
+  const base = {
+    color: { $type: 'color', gray: { $value: '#eee' }, bg: { $value: '{color.gray}' } },
+  };
+
+  it('emits media-query and explicit theme blocks', () => {
+    const { css } = generate([base], {
+      themes: [
+        {
+          name: 'dark',
+          media: '(prefers-color-scheme: dark)',
+          document: { color: { bg: { $value: '#111' } } },
+        },
+      ],
+    });
+    expect(css).toContain('@media (prefers-color-scheme: dark)');
+    expect(css).toContain(':root:not([data-theme])');
+    expect(css).toContain(':root[data-theme="dark"]');
+    expect(css).toContain(':host([data-theme="dark"])');
+    expect(css).toMatch(/--cq-color-bg: #111;/);
+    expect(css).toContain('color-scheme: dark;');
+  });
+
+  it('rejects overrides of tokens that do not exist', () => {
+    expect(() =>
+      generate([base], {
+        themes: [{ name: 'dark', document: { color: { nope: { $value: '#000' } } } }],
+      }),
+    ).toThrow(/unknown token --cq-color-nope/);
+  });
+});

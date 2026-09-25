@@ -1,20 +1,31 @@
 {
+  "$description": "Semantic tokens (light theme): what components use. Dark values live in semantic.dark.tokens.json.",
   "color": {
     "$type": "color",
     "bg": {
       "canvas": { "$value": "{color.neutral.50}" },
+      "sidebar": { "$value": "{color.neutral.100}" },
       "surface": { "$value": "{color.neutral.0}" },
+      "raised": { "$value": "{color.neutral.0}" },
       "muted": { "$value": "{color.neutral.100}" },
-      "inset": { "$value": "{color.neutral.100}" }
+      "inset": { "$value": "{color.neutral.150}" },
+      "hover": { "$value": "{color.alpha.black-4}" },
+      "active": { "$value": "{color.alpha.black-8}" },
+      "selected": { "$value": "{color.brand.50}" },
+      "scrim": { "$value": "{color.alpha.black-40}" },
+      "inverted": { "$value": "{color.neutral.850}" }
     },
     "text": {
-      "primary": { "$value": "{color.neutral.900}" },
+      "primary": { "$value": "{color.neutral.800}" },
       "secondary": { "$value": "{color.neutral.600}" },
       "muted": { "$value": "{color.neutral.500}" },
-      "inverted": { "$value": "{color.neutral.0}" },
-      "on-accent": { "$value": "{color.neutral.0}" }
+      "placeholder": { "$value": "{color.neutral.400}" },
+      "inverted": { "$value": "{color.neutral.25}" },
+      "on-accent": { "$value": "{color.neutral.0}" },
+      "link": { "$value": "{color.brand.700}" }
     },
     "border": {
+      "subtle": { "$value": "{color.neutral.150}" },
       "default": { "$value": "{color.neutral.200}" },
       "strong": { "$value": "{color.neutral.300}" },
       "focus": { "$value": "{color.brand.500}" }
@@ -22,31 +33,73 @@
     "accent": {
       "default": { "$value": "{color.brand.600}" },
       "hover": { "$value": "{color.brand.700}" },
-      "muted": { "$value": "{color.brand.50}" },
+      "subtle": { "$value": "{color.brand.50}" },
+      "muted": { "$value": "{color.brand.100}" },
       "text": { "$value": "{color.brand.700}" }
     },
     "success": {
       "default": { "$value": "{color.green.600}" },
-      "muted": { "$value": "{color.green.50}" }
+      "subtle": { "$value": "{color.green.50}" },
+      "text": { "$value": "{color.green.700}" }
     },
     "warning": {
-      "default": { "$value": "{color.amber.600}" },
-      "muted": { "$value": "{color.amber.50}" }
+      "default": { "$value": "{color.amber.500}" },
+      "subtle": { "$value": "{color.amber.50}" },
+      "text": { "$value": "{color.amber.700}" }
     },
     "danger": {
       "default": { "$value": "{color.red.600}" },
       "hover": { "$value": "{color.red.700}" },
-      "muted": { "$value": "{color.red.50}" }
+      "subtle": { "$value": "{color.red.50}" },
+      "text": { "$value": "{color.red.700}" }
     },
     "info": {
       "default": { "$value": "{color.blue.600}" },
-      "muted": { "$value": "{color.blue.50}" }
+      "subtle": { "$value": "{color.blue.50}" },
+      "text": { "$value": "{color.blue.700}" }
     },
-    "status": {
+    "comment-status": {
+      "open": { "$value": "{color.blue.500}" },
+      "in-progress": { "$value": "{color.amber.500}" },
+      "in-review": { "$value": "{color.purple.500}" },
+      "resolved": { "$value": "{color.green.500}" },
+      "wont-fix": { "$value": "{color.neutral.400}" }
+    },
+    "priority": {
+      "urgent": { "$value": "{color.red.600}" },
+      "high": { "$value": "{color.orange.500}" },
+      "medium": { "$value": "{color.amber.500}" },
+      "low": { "$value": "{color.blue.400}" },
+      "none": { "$value": "{color.neutral.300}" }
+    },
+    "page-status": {
       "todo": { "$value": "{color.neutral.400}" },
       "in-progress": { "$value": "{color.blue.500}" },
-      "review": { "$value": "{color.amber.500}" },
+      "review": { "$value": "{color.purple.500}" },
       "done": { "$value": "{color.green.500}" }
+    },
+    "label": {
+      "gray": { "bg": { "$value": "{color.neutral.150}" }, "text": { "$value": "{color.neutral.700}" } },
+      "red": { "bg": { "$value": "{color.red.50}" }, "text": { "$value": "{color.red.700}" } },
+      "orange": { "bg": { "$value": "{color.orange.50}" }, "text": { "$value": "{color.orange.600}" } },
+      "yellow": { "bg": { "$value": "{color.amber.50}" }, "text": { "$value": "{color.amber.700}" } },
+      "green": { "bg": { "$value": "{color.green.50}" }, "text": { "$value": "{color.green.700}" } },
+      "blue": { "bg": { "$value": "{color.blue.50}" }, "text": { "$value": "{color.blue.700}" } },
+      "purple": { "bg": { "$value": "{color.purple.50}" }, "text": { "$value": "{color.purple.600}" } },
+      "pink": { "bg": { "$value": "{color.pink.50}" }, "text": { "$value": "{color.pink.600}" } }
+    },
+    "pin": {
+      "default": { "$value": "{color.brand.600}" },
+      "resolved": { "$value": "{color.green.500}" },
+      "ring": { "$value": "{color.neutral.0}" }
     }
+  },
+  "shadow": {
+    "$type": "shadow",
+    "xs": { "$value": "0 1px 1px rgba(23, 22, 21, 0.04)" },
+    "sm": { "$value": "0 1px 2px rgba(23, 22, 21, 0.06), 0 1px 1px rgba(23, 22, 21, 0.03)" },
+    "md": { "$value": "0 4px 12px rgba(23, 22, 21, 0.07), 0 1px 3px rgba(23, 22, 21, 0.05)" },
+    "lg": { "$value": "0 16px 40px rgba(23, 22, 21, 0.12), 0 2px 6px rgba(23, 22, 21, 0.06)" },
+    "focus": { "$value": "0 0 0 3px rgba(127, 113, 236, 0.35)" }
   }
 }

@@ -1,0 +1,81 @@
+{
+  "$description": "Dark theme overrides. Every token here must exist in semantic.tokens.json; the generator enforces it.",
+  "color": {
+    "$type": "color",
+    "bg": {
+      "canvas": { "$value": "{color.neutral.950}" },
+      "sidebar": { "$value": "{color.neutral.900}" },
+      "surface": { "$value": "{color.neutral.900}" },
+      "raised": { "$value": "{color.neutral.850}" },
+      "muted": { "$value": "{color.neutral.850}" },
+      "inset": { "$value": "{color.neutral.800}" },
+      "hover": { "$value": "{color.alpha.white-6}" },
+      "active": { "$value": "{color.alpha.white-10}" },
+      "selected": { "$value": "{color.brand.950}" },
+      "scrim": { "$value": "{color.alpha.black-60}" },
+      "inverted": { "$value": "{color.neutral.100}" }
+    },
+    "text": {
+      "primary": { "$value": "{color.neutral.100}" },
+      "secondary": { "$value": "{color.neutral.400}" },
+      "muted": { "$value": "{color.neutral.500}" },
+      "placeholder": { "$value": "{color.neutral.600}" },
+      "inverted": { "$value": "{color.neutral.900}" },
+      "link": { "$value": "{color.brand.300}" }
+    },
+    "border": {
+      "subtle": { "$value": "{color.neutral.850}" },
+      "default": { "$value": "{color.neutral.800}" },
+      "strong": { "$value": "{color.neutral.700}" },
+      "focus": { "$value": "{color.brand.400}" }
+    },
+    "accent": {
+      "default": { "$value": "{color.brand.500}" },
+      "hover": { "$value": "{color.brand.400}" },
+      "subtle": { "$value": "{color.brand.950}" },
+      "muted": { "$value": "{color.brand.900}" },
+      "text": { "$value": "{color.brand.300}" }
+    },
+    "success": {
+      "subtle": { "$value": "{color.green.900}" },
+      "text": { "$value": "{color.green.400}" }
+    },
+    "warning": {
+      "subtle": { "$value": "{color.amber.900}" },
+      "text": { "$value": "{color.amber.400}" }
+    },
+    "danger": {
+      "default": { "$value": "{color.red.500}" },
+      "hover": { "$value": "{color.red.400}" },
+      "subtle": { "$value": "{color.red.900}" },
+      "text": { "$value": "{color.red.400}" }
+    },
+    "info": {
+      "subtle": { "$value": "{color.blue.900}" },
+      "text": { "$value": "{color.blue.400}" }
+    },
+    "priority": {
+      "none": { "$value": "{color.neutral.700}" }
+    },
+    "label": {
+      "gray": { "bg": { "$value": "{color.neutral.800}" }, "text": { "$value": "{color.neutral.300}" } },
+      "red": { "bg": { "$value": "{color.red.900}" }, "text": { "$value": "{color.red.400}" } },
+      "orange": { "bg": { "$value": "{color.orange.900}" }, "text": { "$value": "{color.orange.400}" } },
+      "yellow": { "bg": { "$value": "{color.amber.900}" }, "text": { "$value": "{color.amber.400}" } },
+      "green": { "bg": { "$value": "{color.green.900}" }, "text": { "$value": "{color.green.400}" } },
+      "blue": { "bg": { "$value": "{color.blue.900}" }, "text": { "$value": "{color.blue.400}" } },
+      "purple": { "bg": { "$value": "{color.purple.900}" }, "text": { "$value": "{color.purple.400}" } },
+      "pink": { "bg": { "$value": "{color.pink.900}" }, "text": { "$value": "{color.pink.400}" } }
+    },
+    "pin": {
+      "default": { "$value": "{color.brand.500}" },
+      "ring": { "$value": "{color.neutral.950}" }
+    }
+  },
+  "shadow": {
+    "$type": "shadow",
+    "sm": { "$value": "0 1px 2px rgba(0, 0, 0, 0.4)" },
+    "md": { "$value": "0 4px 14px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3)" },
+    "lg": { "$value": "0 18px 44px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35)" }
+  }
+}
