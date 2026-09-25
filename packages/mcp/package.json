@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Croquis MCP server — drive projects, sitemaps, content and review from Claude Code.",
-  "license": "AGPL-3.0-or-later",
+  "description": "MCP server for Croquis \u2014 let Claude Code, Cursor and other agents read review feedback, fix it and report back.",
+  "license": "MIT",
   "bin": {
     "croquis-mcp": "./dist/index.js"
   },
@@ -20,12 +20,30 @@
   "dependencies": {
     "@croquis/shared": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.30.1",
-    "zod": "^4.6.5"
+    "zod": "^4.6.5",
+    "@croquis/client": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.13.0",
     "tsup": "^8.5.0",
     "tsx": "^4.19.2",
     "vitest": "^4.1.11"
-  }
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    },
+    "./tools": {
+      "types": "./src/tools.ts",
+      "import": "./src/tools.ts"
+    }
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "website-feedback",
+    "design-review",
+    "croquis"
+  ]
 }

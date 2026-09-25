@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Croquis API — Cloudflare Workers (Hono) + D1 + R2.",
+  "description": "Croquis API \u2014 Cloudflare Workers (Hono) + D1 + R2.",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "dev": "wrangler dev",
@@ -17,6 +17,8 @@
     "auth:schema": "auth generate --config scripts/auth-schema.config.ts --output /dev/stdout --yes"
   },
   "dependencies": {
+    "@croquis/client": "workspace:*",
+    "@croquis/mcp": "workspace:*",
     "@croquis/shared": "workspace:*",
     "@hono/zod-openapi": "^1.6.3",
     "@scalar/hono-api-reference": "^0.12.6",

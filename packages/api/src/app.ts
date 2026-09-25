@@ -17,6 +17,7 @@ import projects from './routes/projects';
 import publicRoutes from './routes/public';
 import workspaces from './routes/workspaces';
 import { csrfGuard, resolvePrincipal, trustedOrigin } from './security/principal';
+import { handleMcp } from './services/mcp-remote';
 
 const app = new OpenAPIHono<AppEnv>();
 
@@ -91,6 +92,12 @@ app.use('/api/v1/*', async (c, next) => {
 });
 
 app.get('/api/health', (c) => c.json({ ok: true, version: VERSION }));
+
+// --- Remote MCP ----------------------------------------------------------------------
+
+app.on(['GET', 'POST', 'DELETE'], '/mcp', (c) =>
+  handleMcp(c, (request) => Promise.resolve(app.fetch(request, c.env, c.executionCtx))),
+);
 
 app.route('/api/v1', workspaces);
 app.route('/api/v1', projects);

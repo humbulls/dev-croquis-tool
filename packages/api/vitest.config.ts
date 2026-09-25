@@ -9,6 +9,8 @@ export default defineConfig({
     cloudflareTest({
       main: './src/index.ts',
       wrangler: { configPath: './wrangler.jsonc' },
+      // Workers AI is a remote binding; tests stay offline and mock providers instead.
+      remoteBindings: false,
       miniflare: {
         bindings: {
           ADMIN_TOKEN: 'test-admin-token',
