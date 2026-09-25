@@ -1,20 +1,12 @@
 /// <reference types="@cloudflare/vitest-pool-workers/types" />
 import type { D1Migration } from '@cloudflare/vitest-pool-workers';
+import type { Env as WorkerEnv } from '../src/env';
 
-// The `env` exported by `cloudflare:test` is typed as `Cloudflare.Env`.
-// Declare it here so tests are type-safe without running `wrangler types`.
+// `env` from `cloudflare:test` is typed as `Cloudflare.Env`: make it the
+// Worker's own Env plus what the test pool injects (see vitest.config.ts).
 declare global {
   namespace Cloudflare {
-    interface Env {
-      DB: D1Database;
-      BUCKET: R2Bucket;
-      ADMIN_TOKEN: string;
-      DASHBOARD_ORIGIN?: string;
-      AI_PROVIDER?: string;
-      ANTHROPIC_API_KEY?: string;
-      OPENAI_API_KEY?: string;
-      AI_MODEL?: string;
-      /** Injected by the test pool (see vitest.config.ts). */
+    interface Env extends WorkerEnv {
       TEST_MIGRATIONS: D1Migration[];
     }
   }

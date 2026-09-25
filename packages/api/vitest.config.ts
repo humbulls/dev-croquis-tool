@@ -12,12 +12,15 @@ export default defineConfig({
       miniflare: {
         bindings: {
           ADMIN_TOKEN: 'test-admin-token',
+          AUTH_SECRET: 'test-auth-secret-0123456789abcdef0123456789',
+          SIGNUP_MODE: 'invite',
           TEST_MIGRATIONS: migrations,
-          // Force AI endpoints into the "unconfigured" path even if the
-          // developer's .dev.vars carries real provider keys.
-          AI_PROVIDER: '',
+          // Keep tests offline and deterministic even if the developer's
+          // .dev.vars carries real provider keys; AI tests opt in explicitly.
+          AI_PROVIDER: 'none',
           ANTHROPIC_API_KEY: '',
           OPENAI_API_KEY: '',
+          RESEND_API_KEY: '',
         },
       },
     }),

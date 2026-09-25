@@ -10,20 +10,25 @@
     "deploy": "wrangler deploy",
     "build": "wrangler deploy --dry-run --outdir dist",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "vitest run && vitest run -c vitest.node.config.ts",
     "migrate:local": "wrangler d1 migrations apply croquis --local",
     "migrate:remote": "wrangler d1 migrations apply croquis --remote",
-    "cf-typegen": "wrangler types"
+    "cf-typegen": "wrangler types",
+    "auth:schema": "auth generate --config scripts/auth-schema.config.ts --output /dev/stdout --yes"
   },
   "dependencies": {
     "@croquis/shared": "workspace:*",
-    "@hono/zod-validator": "^0.9.1",
+    "@hono/zod-openapi": "^1.6.3",
+    "@scalar/hono-api-reference": "^0.12.6",
+    "better-auth": "^1.7.6",
     "hono": "^4.13.9",
     "zod": "^4.6.5"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.22.0",
     "@cloudflare/workers-types": "^5.20260925.1",
+    "@types/better-sqlite3": "^9.6.0",
+    "better-sqlite3": "^13.0.3",
     "vitest": "^4.1.11",
     "wrangler": "^4.140.0"
   }
