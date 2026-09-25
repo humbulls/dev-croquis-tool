@@ -110,7 +110,20 @@ export const createPageInput = z.object({
 });
 export type CreatePageInput = z.infer<typeof createPageInput>;
 
-export const updatePageInput = createPageInput.partial();
+/**
+ * PATCH body. Declared explicitly (no `.default()`), because `.partial()` of a
+ * schema with defaults would inject those defaults and silently overwrite
+ * fields the client never sent.
+ */
+export const updatePageInput = z.object({
+  parent_id: uuid.nullable().optional(),
+  path: z.string().trim().min(1).max(FIELD_LIMITS.pagePath).optional(),
+  title: z.string().trim().max(FIELD_LIMITS.pageTitle).optional(),
+  purpose: z.string().max(FIELD_LIMITS.pagePurpose).optional(),
+  audience: z.string().max(FIELD_LIMITS.pageAudience).optional(),
+  status: pageStatusSchema.optional(),
+  sort_index: z.number().int().optional(),
+});
 export type UpdatePageInput = z.infer<typeof updatePageInput>;
 
 // ---------------------------------------------------------------------------
@@ -137,7 +150,13 @@ export const createContentBlockInput = z.object({
 });
 export type CreateContentBlockInput = z.infer<typeof createContentBlockInput>;
 
-export const updateContentBlockInput = createContentBlockInput.partial();
+/** PATCH body — explicit, no defaults (see `updatePageInput`). */
+export const updateContentBlockInput = z.object({
+  type: contentBlockTypeSchema.optional(),
+  position: z.number().int().optional(),
+  content: z.string().max(FIELD_LIMITS.contentBody).optional(),
+  ai_generated: z.boolean().optional(),
+});
 export type UpdateContentBlockInput = z.infer<typeof updateContentBlockInput>;
 
 // ---------------------------------------------------------------------------

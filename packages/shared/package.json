@@ -19,9 +19,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "zod": "^3.25.76"
+    "zod": "^4.6.5"
   },
   "devDependencies": {
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   }
 }

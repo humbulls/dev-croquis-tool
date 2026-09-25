@@ -131,6 +131,47 @@ describe('pages', () => {
     expect(legal.sort_index).toBe(1); // after /a/b under /a
   });
 
+  it('PATCH only changes the fields that were sent (no default injection)', async () => {
+    const project = await createProject('Partial');
+    const h = jsonHeaders(project.api_token);
+    const page = await json(
+      await request(`/projects/${project.id}/pages`, {
+        method: 'POST',
+        headers: h,
+        body: JSON.stringify({ path: '/keep', title: 'Keep me', purpose: 'Why', audience: 'Who' }),
+      }),
+    );
+    const patched = await json(
+      await request(`/projects/${project.id}/pages/${page.id}`, {
+        method: 'PATCH',
+        headers: h,
+        body: JSON.stringify({ status: 'review' }),
+      }),
+    );
+    expect(patched.status).toBe('review');
+    expect(patched.title).toBe('Keep me');
+    expect(patched.purpose).toBe('Why');
+    expect(patched.audience).toBe('Who');
+
+    const block = await json(
+      await request(`/projects/${project.id}/pages/${page.id}/content-blocks`, {
+        method: 'POST',
+        headers: h,
+        body: JSON.stringify({ type: 'body', content: 'Original', ai_generated: true }),
+      }),
+    );
+    const blockPatched = await json(
+      await request(`/projects/${project.id}/pages/${page.id}/content-blocks/${block.id}`, {
+        method: 'PATCH',
+        headers: h,
+        body: JSON.stringify({ position: 5 }),
+      }),
+    );
+    expect(blockPatched.position).toBe(5);
+    expect(blockPatched.content).toBe('Original');
+    expect(blockPatched.ai_generated).toBe(true);
+  });
+
   it('manages content blocks under a page', async () => {
     const project = await createProject('Content');
     const h = jsonHeaders(project.api_token);
