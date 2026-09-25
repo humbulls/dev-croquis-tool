@@ -1,90 +1,123 @@
 import { describe, expect, it } from 'vitest';
 import {
-  AI_EXPORT_SCHEMA_VERSION,
-  createCommentInput,
-  createCommentReplyInput,
+  commentListQuery,
+  createApiKeyInput,
   createPageInput,
   createProjectInput,
+  createWebhookInput,
   FIELD_LIMITS,
+  fixCommentInput,
+  ingestCommentInput,
   PAGE_STATUSES,
-  projectExportSchema,
+  updateCommentInput,
+  updatePageInput,
+  upsertIntegrationInput,
 } from '../src';
 
-describe('createProjectInput', () => {
-  it('trims and accepts a valid name', () => {
+const UUID = '00000000-0000-4000-8000-000000000001';
+
+describe('projects', () => {
+  it('trims names and applies defaults', () => {
     const parsed = createProjectInput.parse({ name: '  My Site  ' });
-    expect(parsed.name).toBe('My Site');
+    expect(parsed).toMatchObject({ name: 'My Site', description: '', widget_mode: 'activated' });
   });
-
-  it('rejects an empty name', () => {
+  it('rejects empty and oversized names', () => {
     expect(createProjectInput.safeParse({ name: '   ' }).success).toBe(false);
-  });
-
-  it('rejects a name over the limit', () => {
-    const long = 'a'.repeat(FIELD_LIMITS.projectName + 1);
-    expect(createProjectInput.safeParse({ name: long }).success).toBe(false);
+    expect(
+      createProjectInput.safeParse({ name: 'a'.repeat(FIELD_LIMITS.projectName + 1) }).success,
+    ).toBe(false);
   });
 });
 
-describe('createPageInput', () => {
-  it('applies defaults', () => {
-    const parsed = createPageInput.parse({ path: '/about' });
-    expect(parsed.status).toBe('todo');
-    expect(parsed.title).toBe('');
-    expect(parsed.purpose).toBe('');
-  });
-
-  it('accepts every known status', () => {
+describe('pages', () => {
+  it('requires a leading slash and accepts every status', () => {
+    expect(createPageInput.safeParse({ path: 'about' }).success).toBe(false);
     for (const status of PAGE_STATUSES) {
       expect(createPageInput.safeParse({ path: '/x', status }).success).toBe(true);
     }
   });
-
-  it('rejects an unknown status', () => {
-    expect(createPageInput.safeParse({ path: '/x', status: 'archived' }).success).toBe(false);
+  it('PATCH schema never injects defaults', () => {
+    expect(updatePageInput.parse({ status: 'done' })).toEqual({ status: 'done' });
+    expect(updateCommentInput.parse({ priority: 'high' })).toEqual({ priority: 'high' });
   });
 });
 
-describe('createCommentInput', () => {
-  it('requires a non-empty body and page_url', () => {
-    expect(createCommentInput.safeParse({ page_url: 'https://x.test', body: '' }).success).toBe(
+describe('ingestCommentInput (widget)', () => {
+  it('accepts a minimal payload and defaults the kind', () => {
+    const parsed = ingestCommentInput.parse({ page_url: 'https://x.test/', body: 'fix spacing' });
+    expect(parsed.kind).toBe('feedback');
+    expect(parsed.anchor).toBeUndefined();
+  });
+  it('rejects non-http URLs, empty bodies and out-of-range anchors', () => {
+    expect(
+      ingestCommentInput.safeParse({ page_url: 'javascript:alert(1)', body: 'x' }).success,
+    ).toBe(false);
+    expect(ingestCommentInput.safeParse({ page_url: 'https://x.test', body: '  ' }).success).toBe(
       false,
     );
-    expect(createCommentInput.safeParse({ page_url: '', body: 'hi' }).success).toBe(false);
+    expect(
+      ingestCommentInput.safeParse({ page_url: 'https://x.test', body: 'x', anchor: { rel_x: 2 } })
+        .success,
+    ).toBe(false);
   });
-
-  it('defaults nullable target fields to null and viewport to desktop', () => {
-    const parsed = createCommentInput.parse({ page_url: 'https://x.test/', body: 'fix spacing' });
-    expect(parsed.viewport).toBe('desktop');
-    expect(parsed.element_selector).toBeNull();
-    expect(parsed.computed_style).toBeNull();
-    expect(parsed.screenshot).toBeNull();
+  it('caps diagnostics entries', () => {
+    const entries = Array.from({ length: FIELD_LIMITS.diagnosticsEntries + 1 }, (_, i) => ({
+      level: 'error' as const,
+      message: `e${i}`,
+      at: 1,
+    }));
+    expect(
+      ingestCommentInput.safeParse({
+        page_url: 'https://x.test',
+        body: 'x',
+        diagnostics: { console: entries },
+      }).success,
+    ).toBe(false);
   });
 });
 
-describe('createCommentReplyInput', () => {
-  it('requires a body', () => {
-    expect(createCommentReplyInput.safeParse({ body: '' }).success).toBe(false);
-    expect(createCommentReplyInput.safeParse({ body: 'looks good' }).success).toBe(true);
+describe('fixCommentInput (agent loop)', () => {
+  it('needs at least one piece of evidence', () => {
+    expect(fixCommentInput.safeParse({}).success).toBe(false);
+    expect(fixCommentInput.parse({ commit_sha: 'abc1234' }).status).toBe('in_review');
+  });
+  it('validates the SHA format', () => {
+    expect(fixCommentInput.safeParse({ commit_sha: 'not-a-sha' }).success).toBe(false);
   });
 });
 
-describe('projectExportSchema', () => {
-  it('validates a minimal export envelope', () => {
-    const now = Date.now();
-    const result = projectExportSchema.safeParse({
-      schema_version: AI_EXPORT_SCHEMA_VERSION,
-      exported_at: now,
-      project: {
-        id: '00000000-0000-4000-8000-000000000001',
-        name: 'Site',
-        slug: 'site',
-        created_at: now,
-        updated_at: now,
-      },
-      pages: [],
-      orphan_comments: [],
-    });
-    expect(result.success).toBe(true);
+describe('commentListQuery', () => {
+  it('parses comma-separated filters and coerces limit', () => {
+    const q = commentListQuery.parse({ status: 'open,in_review', limit: '20', page: 'unassigned' });
+    expect(q.status).toEqual(['open', 'in_review']);
+    expect(q.limit).toBe(20);
+    expect(q.page).toBe('unassigned');
+    expect(q.sort).toBe('newest');
+  });
+  it('rejects unknown statuses and oversized limits', () => {
+    expect(commentListQuery.safeParse({ status: 'open,bogus' }).success).toBe(false);
+    expect(commentListQuery.safeParse({ limit: '1000' }).success).toBe(false);
+  });
+});
+
+describe('platform inputs', () => {
+  it('webhooks must be https', () => {
+    expect(createWebhookInput.safeParse({ url: 'http://example.com/hook' }).success).toBe(false);
+    expect(createWebhookInput.parse({ url: 'https://example.com/hook' }).event_types).toEqual([
+      '*',
+    ]);
+  });
+  it('integration input is discriminated by provider', () => {
+    expect(
+      upsertIntegrationInput.safeParse({ provider: 'github', owner: 'a', repo: 'b' }).success,
+    ).toBe(true);
+    expect(upsertIntegrationInput.safeParse({ provider: 'github', owner: 'a' }).success).toBe(
+      false,
+    );
+    expect(upsertIntegrationInput.safeParse({ provider: 'jira' }).success).toBe(false);
+  });
+  it('api keys default to full scope', () => {
+    expect(createApiKeyInput.parse({ name: 'CI', project_id: UUID }).scopes).toEqual(['*']);
+    expect(createApiKeyInput.safeParse({ name: 'x', scopes: ['admin:all'] }).success).toBe(false);
   });
 });
