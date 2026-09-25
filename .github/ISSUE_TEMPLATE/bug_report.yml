@@ -1,0 +1,64 @@
+name: Bug report
+description: Something in Croquis does not work as documented
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please search existing issues first.
+        **Security issues must not be reported here** — see [SECURITY.md](https://github.com/humbulls/croquis/blob/main/SECURITY.md).
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - API (Workers / D1 / R2)
+        - Dashboard
+        - Widget (embedded on a site)
+        - MCP server
+        - AI generation
+        - Deployment / self-hosting
+        - Docs
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Croquis version / commit
+      placeholder: "v1.0.0 or a commit SHA"
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Include the exact error message and HTTP status if any.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Create a project
+        2. Embed the widget on …
+        3. Right-click …
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: "Chrome 140 / macOS 16, self-hosted on Cloudflare (free plan)"
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Browser console, `wrangler tail`, or MCP stderr. Remove tokens and keys.
+      render: shell
