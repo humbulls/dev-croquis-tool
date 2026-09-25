@@ -161,6 +161,18 @@ export const aiContentInput = z.object({
   brief: z.string().trim().max(FIELD_LIMITS.aiBrief).optional(),
 });
 
+export const aiTriageInput = z.object({
+  /** Write suggested titles and duplicate links back to the comments (default), or only return them. */
+  apply: z.boolean().default(true),
+});
+
+export const aiTypoCheckInput = z.object({
+  /** Check one page (default: every page with content). */
+  page_id: id.optional(),
+  /** Create a `typo` comment per finding (default), or only return findings. */
+  create_comments: z.boolean().default(true),
+});
+
 export const aiDigestSchema = z.object({
   markdown: z.string(),
   active_count: z.number().int(),
@@ -199,3 +211,7 @@ export const aiTranslationSchema = z.object({
   cached: z.boolean(),
 });
 export type AiTranslation = z.infer<typeof aiTranslationSchema>;
+
+/** POST /comments/:id/external-issue — create a GitHub or Linear issue from a comment. */
+export const createExternalIssueInput = z.object({ provider: z.enum(['github', 'linear']) });
+export type CreateExternalIssueInput = z.infer<typeof createExternalIssueInput>;

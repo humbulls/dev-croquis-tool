@@ -32,6 +32,7 @@ export interface EventInput {
 export class UnitOfWork {
   private readonly statements: D1PreparedStatement[] = [];
   private readonly eventIds: string[] = [];
+  private lastEventAt = 0;
 
   constructor(private readonly env: Env) {}
 
@@ -40,8 +41,11 @@ export class UnitOfWork {
     return this;
   }
 
-  event(event: EventInput, now = Date.now()): string {
+  event(event: EventInput): string {
     const id = newId();
+    // Strictly increasing within the unit, so the log shows events in the order they were emitted.
+    const now = Math.max(Date.now(), this.lastEventAt + 1);
+    this.lastEventAt = now;
     this.eventIds.push(id);
     const db = this.env.DB;
     this.statements.push(

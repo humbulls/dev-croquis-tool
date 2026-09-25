@@ -6,6 +6,8 @@
 import * as s from '@croquis/shared';
 import { z } from '@hono/zod-openapi';
 
+export { OkSchema as OkRef } from './openapi';
+
 const named = <T extends z.ZodType>(name: string, schema: T): T => schema.openapi(name) as T;
 
 // Identity & workspaces
@@ -53,6 +55,7 @@ export const ReorderPagesInput = named('ReorderPagesInput', s.reorderPagesInput)
 export const CreateContentBlockInput = named('CreateContentBlockInput', s.createContentBlockInput);
 export const UpdateContentBlockInput = named('UpdateContentBlockInput', s.updateContentBlockInput);
 export const CreateReviewRoundInput = named('CreateReviewRoundInput', s.createReviewRoundInput);
+export const UpdateReviewRoundInput = named('UpdateReviewRoundInput', s.updateReviewRoundInput);
 export const CreateApprovalInput = named('CreateApprovalInput', s.createApprovalInput);
 
 // Comments
@@ -76,6 +79,10 @@ export const ShareSession = named('ShareSession', s.shareSessionSchema);
 export const SharePage = named('SharePage', s.sharePageSchema);
 export const ShareCommentDetail = named('ShareCommentDetail', s.shareCommentDetailSchema);
 export const ShareReplyInput = named('ShareReplyInput', s.shareReplyInput);
+export const ShareCommentInput = named('ShareCommentInput', s.shareCommentInput);
+export const ShareApprovalInput = named('ShareApprovalInput', s.shareApprovalInput);
+export const WidgetConfig = named('WidgetConfig', s.widgetConfigSchema);
+export const PublicReply = named('PublicReply', s.publicReplySchema);
 
 // Platform
 export const ActivityEvent = named('ActivityEvent', s.activityEventSchema);
@@ -87,7 +94,16 @@ export const UpdateWebhookInput = named('UpdateWebhookInput', s.updateWebhookInp
 export const Integration = named('Integration', s.integrationSchema);
 export const UpsertIntegrationInput = named('UpsertIntegrationInput', s.upsertIntegrationInput);
 export const ExternalLink = named('ExternalLink', s.externalLinkSchema);
+export const CreateExternalIssueInput = named(
+  'CreateExternalIssueInput',
+  s.createExternalIssueInput,
+);
 export const AiRun = named('AiRun', s.aiRunSchema);
+export const AiBriefInput = named('AiBriefInput', s.aiBriefInput);
+export const AiContentInput = named('AiContentInput', s.aiContentInput);
+export const AiTriageInput = named('AiTriageInput', s.aiTriageInput);
+export const AiTypoCheckInput = named('AiTypoCheckInput', s.aiTypoCheckInput);
+export const AiTranslateInput = named('AiTranslateInput', s.aiTranslateInput);
 export const AiDigest = named('AiDigest', s.aiDigestSchema);
 export const AiTriage = named('AiTriage', s.aiTriageSchema);
 export const AiTypoCheck = named('AiTypoCheck', s.aiTypoCheckSchema);

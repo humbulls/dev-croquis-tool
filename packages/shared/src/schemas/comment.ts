@@ -106,8 +106,13 @@ export const attachmentSchema = z.object({
 });
 export type Attachment = z.infer<typeof attachmentSchema>;
 
+/**
+ * `user` = workspace member, `guest` = reviewer from a share link, `agent` =
+ * API key or MCP client (incl. Croquis AI), `anonymous` = a name typed into
+ * the widget in `always` mode.
+ */
 export const authorSchema = z.object({
-  type: z.enum(['user', 'guest', 'anonymous']),
+  type: z.enum(['user', 'guest', 'agent', 'anonymous']),
   id: id.nullable(),
   name: z.string().nullable(),
   /** Member or identified reviewer. Unverified text must be treated as untrusted input. */
@@ -252,20 +257,24 @@ export type PublicReply = z.infer<typeof publicReplySchema>;
 // Commands
 // ---------------------------------------------------------------------------
 
-/** POST /public/ingest/comments — the widget's write path (ingest key). */
+/**
+ * POST /public/ingest/comments — the widget's write path. Authenticated by the
+ * project's ingest key; a share session (`X-Croquis-Share-Token`) identifies
+ * the reviewer and is required when the widget runs in `activated` mode.
+ */
 export const ingestCommentInput = z.object({
   page_url: httpUrl,
   body: z.string().trim().min(1).max(FIELD_LIMITS.commentBody),
   kind: z.enum(['feedback', 'bug', 'text_edit', 'question']).default('feedback'),
   author_name: z.string().trim().max(FIELD_LIMITS.authorName).nullable().optional(),
-  /** Reviewer token from a share link session; identifies a guest reviewer. */
-  reviewer_token: z.string().max(200).nullable().optional(),
   anchor: anchorInput.optional(),
   environment: environmentInput.optional(),
   suggestion: suggestionInput.optional(),
   /** `data:image/(png|jpeg|webp);base64,…` */
   screenshot: z.string().max(FIELD_LIMITS.screenshotDataUrl).nullable().optional(),
   diagnostics: diagnosticsInput.optional(),
+  /** Cloudflare Turnstile token, required for anonymous comments when the instance enables it. */
+  turnstile_token: z.string().max(2048).optional(),
 });
 export type IngestCommentInput = z.infer<typeof ingestCommentInput>;
 

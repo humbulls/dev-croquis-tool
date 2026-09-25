@@ -19,7 +19,6 @@ export async function call(path: string, init: RequestInit = {}): Promise<Respon
   return response;
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: loose JSON for test ergonomics
 export async function json(response: Response): Promise<any> {
   return response.json();
 }
@@ -35,7 +34,8 @@ function authHeaders(auth: Auth | undefined): Record<string, string> {
 
 export const api = {
   get: (path: string, auth?: Auth) => call(`/api/v1${path}`, { headers: authHeaders(auth) }),
-  delete: (path: string, auth?: Auth) => call(`/api/v1${path}`, { method: 'DELETE', headers: authHeaders(auth) }),
+  delete: (path: string, auth?: Auth) =>
+    call(`/api/v1${path}`, { method: 'DELETE', headers: authHeaders(auth) }),
   post: (path: string, body: unknown, auth?: Auth, extra: Record<string, string> = {}) =>
     call(`/api/v1${path}`, {
       method: 'POST',
@@ -74,7 +74,8 @@ export async function signIn(email: string): Promise<string> {
     headers: { 'Content-Type': 'application/json', Origin: BASE },
     body: JSON.stringify({ email, password: PASSWORD }),
   });
-  if (response.status !== 200) throw new Error(`sign-in failed: ${response.status} ${await response.text()}`);
+  if (response.status !== 200)
+    throw new Error(`sign-in failed: ${response.status} ${await response.text()}`);
   return cookieFrom(response);
 }
 
@@ -123,25 +124,38 @@ export async function addMember(
   email: string,
   role: 'member' | 'admin' = 'member',
 ): Promise<Session> {
-  const invite = await json(await api.post(`/workspaces/${owner.workspaceId}/invitations`, { email, role }, owner));
+  const invite = await json(
+    await api.post(`/workspaces/${owner.workspaceId}/invitations`, { email, role }, owner),
+  );
   const token = String(invite.url).split('/invite/')[1];
   const signup = await signUp(email);
-  if (signup.status !== 200) throw new Error(`sign-up failed: ${signup.status} ${await signup.text()}`);
+  if (signup.status !== 200)
+    throw new Error(`sign-up failed: ${signup.status} ${await signup.text()}`);
   const cookie = cookieFrom(signup);
   const accepted = await api.post(`/invitations/${token}/accept`, {}, { cookie });
-  if (accepted.status !== 200) throw new Error(`accept failed: ${accepted.status} ${await accepted.text()}`);
+  if (accepted.status !== 200)
+    throw new Error(`accept failed: ${accepted.status} ${await accepted.text()}`);
   const me = await json(await api.get('/me', { cookie }));
   return { cookie, userId: me.user.id, email, workspaceId: owner.workspaceId };
 }
 
 export async function createProject(owner: Auth, body: Record<string, unknown> = {}) {
   const response = await api.post('/projects', { name: 'Marketing site', ...body }, owner);
-  if (response.status !== 201) throw new Error(`createProject failed: ${response.status} ${await response.text()}`);
+  if (response.status !== 201)
+    throw new Error(`createProject failed: ${response.status} ${await response.text()}`);
   return json(response);
 }
 
-export async function createApiKey(owner: Session, body: Record<string, unknown> = {}): Promise<string> {
-  const response = await api.post(`/workspaces/${owner.workspaceId}/api-keys`, { name: 'CI', ...body }, owner);
-  if (response.status !== 201) throw new Error(`createApiKey failed: ${response.status} ${await response.text()}`);
+export async function createApiKey(
+  owner: Session,
+  body: Record<string, unknown> = {},
+): Promise<string> {
+  const response = await api.post(
+    `/workspaces/${owner.workspaceId}/api-keys`,
+    { name: 'CI', ...body },
+    owner,
+  );
+  if (response.status !== 201)
+    throw new Error(`createApiKey failed: ${response.status} ${await response.text()}`);
   return (await json(response)).key;
 }

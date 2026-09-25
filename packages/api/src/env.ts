@@ -37,7 +37,8 @@ export interface Env {
   ANTHROPIC_API_KEY?: string;
   OPENAI_API_KEY?: string;
 
-  /** Optional Cloudflare Turnstile secret; when set the widget must send a token. */
+  /** Optional Cloudflare Turnstile: anonymous widget comments must then carry a token. */
+  TURNSTILE_SITE_KEY?: string;
   TURNSTILE_SECRET?: string;
 
   /** Optional social sign-in. */

@@ -29,6 +29,7 @@ const STANDARD_ERRORS = {
 } as const;
 
 const PUBLIC_ERRORS = {
+  401: problem('Unknown ingest key, wrong password or missing share session'),
   403: problem('Not allowed (origin, share link settings or reviewer identity)'),
   404: problem('Unknown key, link or resource'),
   422: problem('The request did not match the schema (see `errors`)'),

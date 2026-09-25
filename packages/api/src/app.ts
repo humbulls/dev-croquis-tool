@@ -9,7 +9,12 @@ import { VERSION } from './config';
 import type { AppEnv } from './env';
 import { ApiError, problem, validationError } from './http/problem';
 import { rateLimit } from './http/rate-limit';
+import ai from './routes/ai';
+import comments from './routes/comments';
+import pages from './routes/pages';
+import platform from './routes/platform';
 import projects from './routes/projects';
+import publicRoutes from './routes/public';
 import workspaces from './routes/workspaces';
 import { csrfGuard, resolvePrincipal, trustedOrigin } from './security/principal';
 
@@ -89,6 +94,11 @@ app.get('/api/health', (c) => c.json({ ok: true, version: VERSION }));
 
 app.route('/api/v1', workspaces);
 app.route('/api/v1', projects);
+app.route('/api/v1', pages);
+app.route('/api/v1', comments);
+app.route('/api/v1', platform);
+app.route('/api/v1', ai);
+app.route('/api/v1', publicRoutes);
 
 app.openAPIRegistry.registerComponent('securitySchemes', 'bearerAuth', {
   type: 'http',
@@ -124,6 +134,16 @@ app.doc31('/api/v1/openapi.json', {
     { name: 'Share links' },
     { name: 'Labels' },
     { name: 'Activity' },
+    { name: 'Pages' },
+    { name: 'Content' },
+    { name: 'Review' },
+    { name: 'Comments' },
+    { name: 'Export' },
+    { name: 'Webhooks' },
+    { name: 'Integrations' },
+    { name: 'AI' },
+    { name: 'Widget' },
+    { name: 'Share viewer' },
   ],
 });
 

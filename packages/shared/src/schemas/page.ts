@@ -127,6 +127,13 @@ export const createReviewRoundInput = z.object({
 });
 export type CreateReviewRoundInput = z.infer<typeof createReviewRoundInput>;
 
+export const updateReviewRoundInput = z.object({
+  name: z.string().trim().min(1).max(FIELD_LIMITS.pageTitle).optional(),
+  preview_url: httpUrl.nullable().optional(),
+  status: z.enum(REVIEW_ROUND_STATUSES).optional(),
+});
+export type UpdateReviewRoundInput = z.infer<typeof updateReviewRoundInput>;
+
 export const pageApprovalSchema = z.object({
   id,
   page_id: id,

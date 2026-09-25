@@ -57,3 +57,29 @@ export type ShareCommentDetail = z.infer<typeof shareCommentDetailSchema>;
 export const shareReplyInput = z.object({
   body: z.string().trim().min(1).max(FIELD_LIMITS.replyBody),
 });
+
+/** POST /public/share/:slug/comments — a page-level comment from the share viewer. */
+export const shareCommentInput = z.object({
+  page_id: id,
+  body: z.string().trim().min(1).max(FIELD_LIMITS.commentBody),
+  kind: z.enum(['feedback', 'question']).default('feedback'),
+});
+export type ShareCommentInput = z.infer<typeof shareCommentInput>;
+
+/** POST /public/share/:slug/pages/:id/approvals */
+export const shareApprovalInput = z.object({
+  decision: approvalDecisionSchema,
+  note: z.string().max(FIELD_LIMITS.approvalNote).default(''),
+});
+export type ShareApprovalInput = z.infer<typeof shareApprovalInput>;
+
+/** GET /public/widget/config — what the embedded widget needs before rendering. */
+export const widgetConfigSchema = z.object({
+  project: z.object({ id, name: z.string() }),
+  widget_mode: z.enum(['activated', 'always', 'off']),
+  /** True when comments need a reviewer session from a share link (`activated` mode). */
+  requires_reviewer: z.boolean(),
+  /** True when anonymous comments must carry a Turnstile token. */
+  turnstile_site_key: z.string().nullable(),
+});
+export type WidgetConfig = z.infer<typeof widgetConfigSchema>;
