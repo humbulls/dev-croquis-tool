@@ -2,13 +2,13 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { HTTPException } from 'hono/http-exception';
 import type { Env, Variables } from './env';
-import { projectsRoute } from './routes/projects';
-import { pagesRoute } from './routes/pages';
-import { contentBlocksRoute } from './routes/content-blocks';
-import { commentsRoute } from './routes/comments';
-import { ingestRoute } from './routes/ingest';
-import { shareRoute } from './routes/share';
 import { aiRoute } from './routes/ai';
+import { commentsRoute } from './routes/comments';
+import { contentBlocksRoute } from './routes/content-blocks';
+import { ingestRoute } from './routes/ingest';
+import { pagesRoute } from './routes/pages';
+import { projectsRoute } from './routes/projects';
+import { shareRoute } from './routes/share';
 
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 

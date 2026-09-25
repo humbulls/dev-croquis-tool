@@ -1,10 +1,5 @@
-import { Hono } from 'hono';
 import { createContentBlockInput, updateContentBlockInput } from '@croquis/shared';
-import type { Env, Variables } from '../env';
-import { requireProjectAccess } from '../lib/auth';
-import { notFound, validateJson } from '../lib/http';
-import { newId } from '../lib/ids';
-import { getPageById } from '../db/pages';
+import { Hono } from 'hono';
 import {
   type ContentBlockRow,
   type ContentBlockUpdate,
@@ -16,6 +11,11 @@ import {
   toContentBlock,
   updateContentBlock,
 } from '../db/content-blocks';
+import { getPageById } from '../db/pages';
+import type { Env, Variables } from '../env';
+import { requireProjectAccess } from '../lib/auth';
+import { notFound, validateJson } from '../lib/http';
+import { newId } from '../lib/ids';
 
 /** Mounted at /projects/:projectId/pages/:pageId/content-blocks */
 export const contentBlocksRoute = new Hono<{ Bindings: Env; Variables: Variables }>();

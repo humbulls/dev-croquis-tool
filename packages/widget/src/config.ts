@@ -14,8 +14,7 @@ interface GlobalConfig {
  */
 export function resolveConfig(scriptEl: HTMLScriptElement | null): WidgetConfig | null {
   const globalCfg = (window as unknown as GlobalConfig).CroquisWidget;
-  const attr = (name: string): string | undefined =>
-    scriptEl?.getAttribute(name) ?? undefined;
+  const attr = (name: string): string | undefined => scriptEl?.getAttribute(name) ?? undefined;
 
   const apiUrl = globalCfg?.apiUrl ?? attr('data-croquis-api');
   const ingestKey = globalCfg?.ingestKey ?? attr('data-croquis-ingest-key');

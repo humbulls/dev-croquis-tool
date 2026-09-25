@@ -147,6 +147,10 @@
 
 .c-card--link {
   cursor: pointer;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  text-align: start;
   transition: box-shadow var(--cq-duration-fast) var(--cq-easing-standard);
 }
 

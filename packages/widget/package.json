@@ -8,8 +8,7 @@
   "scripts": {
     "build": "node esbuild.config.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "lint": "tsc --noEmit"
+    "test": "vitest run"
   },
   "dependencies": {
     "@croquis/shared": "workspace:*",

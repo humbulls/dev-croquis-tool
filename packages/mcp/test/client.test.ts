@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { CroquisClient } from '../src/client';
 
 afterEach(() => vi.restoreAllMocks());
@@ -16,13 +16,16 @@ describe('CroquisClient', () => {
 
     const call = fetchMock.mock.calls[0]!;
     expect(call[0]).toBe('https://api.test/projects');
-    expect((call[1]?.headers as Record<string, string>).Authorization).toBe('Bearer crq_x');
+    const headers = call[1]?.headers as Record<string, string> | undefined;
+    expect(headers?.Authorization).toBe('Bearer crq_x');
   });
 
   it('throws on error responses with the API message', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn<typeof fetch>(async () => new Response(JSON.stringify({ error: 'nope' }), { status: 401 })),
+      vi.fn<typeof fetch>(
+        async () => new Response(JSON.stringify({ error: 'nope' }), { status: 401 }),
+      ),
     );
     const client = new CroquisClient({ baseUrl: 'https://api.test', token: 't' });
     await expect(client.getProject('x')).rejects.toThrow(/401: nope/);

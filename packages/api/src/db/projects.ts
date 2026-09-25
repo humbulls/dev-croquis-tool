@@ -58,11 +58,11 @@ export function getProjectById(db: D1Database, id: string): Promise<ProjectRow |
   return db.prepare('SELECT * FROM projects WHERE id = ?').bind(id).first<ProjectRow>();
 }
 
-export function getProjectByApiTokenHash(
-  db: D1Database,
-  hash: string,
-): Promise<ProjectRow | null> {
-  return db.prepare('SELECT * FROM projects WHERE api_token_hash = ?').bind(hash).first<ProjectRow>();
+export function getProjectByApiTokenHash(db: D1Database, hash: string): Promise<ProjectRow | null> {
+  return db
+    .prepare('SELECT * FROM projects WHERE api_token_hash = ?')
+    .bind(hash)
+    .first<ProjectRow>();
 }
 
 export function getProjectByIngestKey(db: D1Database, key: string): Promise<ProjectRow | null> {
@@ -105,7 +105,10 @@ export async function updateProject(
   sets.push('updated_at = ?');
   binds.push(update.updated_at);
   binds.push(id);
-  await db.prepare(`UPDATE projects SET ${sets.join(', ')} WHERE id = ?`).bind(...binds).run();
+  await db
+    .prepare(`UPDATE projects SET ${sets.join(', ')} WHERE id = ?`)
+    .bind(...binds)
+    .run();
 }
 
 /** Delete a project and every dependent row (explicit cascade). */

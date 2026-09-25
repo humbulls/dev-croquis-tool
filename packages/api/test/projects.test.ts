@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { adminHeaders, createProject, json, jsonHeaders, request } from './helpers';
 
 describe('projects', () => {
@@ -34,7 +34,9 @@ describe('projects', () => {
 
   it('allows access with the project token but not a wrong one', async () => {
     const project = await createProject('Scoped');
-    const ok = await request(`/projects/${project.id}`, { headers: jsonHeaders(project.api_token) });
+    const ok = await request(`/projects/${project.id}`, {
+      headers: jsonHeaders(project.api_token),
+    });
     expect(ok.status).toBe(200);
 
     const wrong = await request(`/projects/${project.id}`, { headers: jsonHeaders('crq_wrong') });

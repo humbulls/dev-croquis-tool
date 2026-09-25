@@ -27,10 +27,7 @@ export async function insertReply(db: D1Database, row: ReplyRow): Promise<void> 
     .run();
 }
 
-export async function listRepliesByComment(
-  db: D1Database,
-  commentId: string,
-): Promise<ReplyRow[]> {
+export async function listRepliesByComment(db: D1Database, commentId: string): Promise<ReplyRow[]> {
   const { results } = await db
     .prepare('SELECT * FROM comment_replies WHERE comment_id = ? ORDER BY created_at ASC')
     .bind(commentId)
@@ -39,10 +36,7 @@ export async function listRepliesByComment(
 }
 
 /** All replies for a project's comments (used by export). */
-export async function listRepliesByProject(
-  db: D1Database,
-  projectId: string,
-): Promise<ReplyRow[]> {
+export async function listRepliesByProject(db: D1Database, projectId: string): Promise<ReplyRow[]> {
   const { results } = await db
     .prepare(
       `SELECT r.* FROM comment_replies r

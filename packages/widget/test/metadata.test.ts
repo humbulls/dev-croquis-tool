@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { buildSelector, buildHeadingContext, collectMetadata } from '../src/metadata';
+import { describe, expect, it } from 'vitest';
+import { buildHeadingContext, buildSelector, collectMetadata } from '../src/metadata';
 
 describe('buildSelector', () => {
   it('uses an id selector when present', () => {

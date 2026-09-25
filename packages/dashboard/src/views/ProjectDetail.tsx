@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'preact/hooks';
 import {
   COMMENT_STATUSES,
   CONTENT_BLOCK_TYPES,
-  formatExportMarkdown,
-  PAGE_STATUS_LABELS,
-  PAGE_STATUSES,
   type Comment,
   type CommentStatus,
   type ContentBlock,
+  formatExportMarkdown,
+  PAGE_STATUS_LABELS,
+  PAGE_STATUSES,
   type Page,
   type PageStatus,
 } from '@croquis/shared';
+import { useEffect, useState } from 'preact/hooks';
 import { useApp, useAsync } from '../app';
 import { buildPageTree, flattenTree } from '../lib/tree';
 
@@ -44,7 +44,7 @@ export function ProjectDetail({ projectId, onBack }: { projectId: string; onBack
     <>
       <div class="c-topbar">
         <div class="o-cluster">
-          <button class="c-btn c-btn--ghost c-btn--sm" onClick={onBack}>
+          <button type="button" class="c-btn c-btn--ghost c-btn--sm" onClick={onBack}>
             ← Projects
           </button>
           <span class="c-topbar__title">{project.data?.name ?? '…'}</span>
@@ -53,7 +53,7 @@ export function ProjectDetail({ projectId, onBack }: { projectId: string; onBack
           {project.data && (
             <span class="u-xs u-muted u-mono">ingest: {project.data.ingest_key}</span>
           )}
-          <button class="c-btn c-btn--danger c-btn--sm" onClick={deleteProject}>
+          <button type="button" class="c-btn c-btn--danger c-btn--sm" onClick={deleteProject}>
             Delete project
           </button>
         </div>
@@ -63,6 +63,7 @@ export function ProjectDetail({ projectId, onBack }: { projectId: string; onBack
         <div class="c-tabs">
           {(['sitemap', 'content', 'review', 'export'] as Tab[]).map((t) => (
             <button
+              type="button"
               key={t}
               class={`c-tabs__tab ${tab === t ? 'c-tabs__tab--active' : ''}`}
               onClick={() => setTab(t)}
@@ -77,15 +78,6 @@ export function ProjectDetail({ projectId, onBack }: { projectId: string; onBack
         {tab === 'export' && <ExportTab projectId={projectId} />}
       </div>
     </>
-  );
-}
-
-function StatusBadge({ status }: { status: PageStatus }) {
-  return (
-    <span class={`c-badge c-badge--${status}`}>
-      <span class="c-badge__dot" />
-      {PAGE_STATUS_LABELS[status]}
-    </span>
   );
 }
 
@@ -166,7 +158,7 @@ function SitemapTab({ projectId }: { projectId: string }) {
               </option>
             ))}
           </select>
-          <button class="c-btn c-btn--primary" onClick={addPage}>
+          <button type="button" class="c-btn c-btn--primary" onClick={addPage}>
             Add
           </button>
         </div>
@@ -190,7 +182,9 @@ function SitemapTab({ projectId }: { projectId: string }) {
                 class="c-select"
                 style={{ width: 'auto' }}
                 value={page.status}
-                onChange={(e) => setStatus(page, (e.target as HTMLSelectElement).value as PageStatus)}
+                onChange={(e) =>
+                  setStatus(page, (e.target as HTMLSelectElement).value as PageStatus)
+                }
               >
                 {PAGE_STATUSES.map((s) => (
                   <option key={s} value={s}>
@@ -198,7 +192,11 @@ function SitemapTab({ projectId }: { projectId: string }) {
                   </option>
                 ))}
               </select>
-              <button class="c-btn c-btn--danger c-btn--sm" onClick={() => remove(page)}>
+              <button
+                type="button"
+                class="c-btn c-btn--danger c-btn--sm"
+                onClick={() => remove(page)}
+              >
                 Delete
               </button>
             </div>
@@ -300,7 +298,7 @@ function ContentBlocks({
           value={content}
           onInput={(e) => setContent((e.target as HTMLTextAreaElement).value)}
         />
-        <button class="c-btn c-btn--primary u-right" onClick={add}>
+        <button type="button" class="c-btn c-btn--primary u-right" onClick={add}>
           Add block
         </button>
       </div>
@@ -346,6 +344,7 @@ function ContentBlockRow({
       />
       <div class="o-cluster o-cluster--between">
         <button
+          type="button"
           class="c-btn c-btn--danger c-btn--sm"
           onClick={async () => {
             if (!window.confirm('Delete this content block?')) return;
@@ -360,6 +359,7 @@ function ContentBlockRow({
           Delete
         </button>
         <button
+          type="button"
           class="c-btn c-btn--primary c-btn--sm"
           onClick={async () => {
             try {
@@ -394,7 +394,9 @@ function ReviewTab({ projectId }: { projectId: string }) {
           class="c-select"
           style={{ width: 'auto' }}
           value={filter}
-          onChange={(e) => setFilter((e.target as HTMLSelectElement).value as 'all' | CommentStatus)}
+          onChange={(e) =>
+            setFilter((e.target as HTMLSelectElement).value as 'all' | CommentStatus)
+          }
         >
           <option value="all">All</option>
           {COMMENT_STATUSES.map((s) => (
@@ -453,10 +455,15 @@ function CommentCard({
       <div class="o-cluster o-cluster--between">
         <span class="c-comment__meta u-truncate">{comment.page_url}</span>
         <div class="o-cluster">
-          <button class="c-btn c-btn--ghost c-btn--sm" onClick={() => setOpen((v) => !v)}>
+          <button
+            type="button"
+            class="c-btn c-btn--ghost c-btn--sm"
+            onClick={() => setOpen((v) => !v)}
+          >
             {open ? 'Hide' : 'Details'}
           </button>
           <button
+            type="button"
             class="c-btn c-btn--sm"
             onClick={async () => {
               const next = comment.status === 'open' ? 'resolved' : 'open';
@@ -478,9 +485,7 @@ function CommentCard({
       {open && detail.data && (
         <div class="o-stack o-stack--tight">
           {comment.screenshot_key && <Screenshot projectId={projectId} commentId={comment.id} />}
-          {comment.computed_style && (
-            <pre class="c-code">{prettyJson(comment.computed_style)}</pre>
-          )}
+          {comment.computed_style && <pre class="c-code">{prettyJson(comment.computed_style)}</pre>}
           {detail.data.replies.map((r) => (
             <div key={r.id} class="c-comment__reply">
               <span class="c-comment__meta">{r.author_name ?? 'Someone'}</span>
@@ -495,6 +500,7 @@ function CommentCard({
               onInput={(e) => setReply((e.target as HTMLInputElement).value)}
             />
             <button
+              type="button"
               class="c-btn c-btn--primary"
               disabled={!reply.trim()}
               onClick={async () => {
@@ -561,12 +567,14 @@ function ExportTab({ projectId }: { projectId: string }) {
       <div class="o-cluster o-cluster--between">
         <div class="c-tabs">
           <button
+            type="button"
             class={`c-tabs__tab ${format === 'markdown' ? 'c-tabs__tab--active' : ''}`}
             onClick={() => setFormat('markdown')}
           >
             Markdown
           </button>
           <button
+            type="button"
             class={`c-tabs__tab ${format === 'json' ? 'c-tabs__tab--active' : ''}`}
             onClick={() => setFormat('json')}
           >
@@ -574,6 +582,7 @@ function ExportTab({ projectId }: { projectId: string }) {
           </button>
         </div>
         <button
+          type="button"
           class="c-btn c-btn--sm"
           onClick={async () => {
             try {

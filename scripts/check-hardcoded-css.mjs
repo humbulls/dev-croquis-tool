@@ -13,7 +13,7 @@
  *
  * Values inside `var(--cq-...)` are always allowed. Zero dependencies.
  */
-import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 

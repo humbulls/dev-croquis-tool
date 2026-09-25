@@ -111,7 +111,10 @@ export function collectMetadata(el: Element, clientX: number, clientY: number): 
   return {
     element_selector: truncate(buildSelector(el), FIELD_LIMITS.selector),
     element_tag: truncate(el.tagName.toLowerCase(), FIELD_LIMITS.elementTag),
-    element_text: truncate((el.textContent ?? '').replace(/\s+/g, ' ').trim(), FIELD_LIMITS.elementText),
+    element_text: truncate(
+      (el.textContent ?? '').replace(/\s+/g, ' ').trim(),
+      FIELD_LIMITS.elementText,
+    ),
     element_html: truncate(el.outerHTML, FIELD_LIMITS.elementHtml),
     element_context: buildHeadingContext(el),
     element_attrs: serializeAttrs(el),

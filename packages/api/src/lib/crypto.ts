@@ -44,7 +44,11 @@ export async function verifyTokenHash(token: string, hash: string): Promise<bool
   return timingSafeEqual(await sha256Hex(token), hash);
 }
 
-async function pbkdf2Bits(password: string, salt: Uint8Array, iterations: number): Promise<Uint8Array> {
+async function pbkdf2Bits(
+  password: string,
+  salt: Uint8Array,
+  iterations: number,
+): Promise<Uint8Array> {
   const key = await crypto.subtle.importKey(
     'raw',
     new TextEncoder().encode(password),

@@ -131,7 +131,11 @@ export async function updateContentBlock(
     .run();
 }
 
-export async function deleteContentBlock(db: D1Database, pageId: string, id: string): Promise<void> {
+export async function deleteContentBlock(
+  db: D1Database,
+  pageId: string,
+  id: string,
+): Promise<void> {
   await db
     .prepare('DELETE FROM content_blocks WHERE id = ? AND page_id = ?')
     .bind(id, pageId)

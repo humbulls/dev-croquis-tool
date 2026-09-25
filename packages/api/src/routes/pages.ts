@@ -1,9 +1,5 @@
-import { Hono } from 'hono';
 import { createPageInput, updatePageInput } from '@croquis/shared';
-import type { Env, Variables } from '../env';
-import { requireProjectAccess } from '../lib/auth';
-import { badRequest, notFound, validateJson } from '../lib/http';
-import { newId } from '../lib/ids';
+import { Hono } from 'hono';
 import {
   deletePageCascade,
   getPageById,
@@ -15,6 +11,10 @@ import {
   toPage,
   updatePage,
 } from '../db/pages';
+import type { Env, Variables } from '../env';
+import { requireProjectAccess } from '../lib/auth';
+import { badRequest, notFound, validateJson } from '../lib/http';
+import { newId } from '../lib/ids';
 
 /** Mounted at /projects/:projectId/pages */
 export const pagesRoute = new Hono<{ Bindings: Env; Variables: Variables }>();

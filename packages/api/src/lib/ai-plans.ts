@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { CONTENT_BLOCK_TYPES, FIELD_LIMITS } from '@croquis/shared';
+import { z } from 'zod';
 
 /** Shape the sitemap-generation prompt asks the model for. */
 export const aiSitemapPlanSchema = z

@@ -1,12 +1,14 @@
+import { uuid } from '@croquis/shared';
 import { Hono } from 'hono';
 import { z } from 'zod';
-import { uuid } from '@croquis/shared';
-import type { Env, Variables } from '../env';
-import { requireProjectAccess } from '../lib/auth';
-import { badRequest, validateJson } from '../lib/http';
-import { newId } from '../lib/ids';
-import { aiComplete, extractJson } from '../lib/ai';
-import { aiContentPlanSchema, aiSitemapPlanSchema, orderSitemapPlan } from '../lib/ai-plans';
+import { listCommentsByProject } from '../db/comments';
+import {
+  type ContentBlockRow,
+  insertContentBlock,
+  listContentBlocksByPage,
+  nextContentPosition,
+  toContentBlock,
+} from '../db/content-blocks';
 import {
   getPageById,
   insertPage,
@@ -15,15 +17,13 @@ import {
   type PageRow,
   toPage,
 } from '../db/pages';
-import {
-  type ContentBlockRow,
-  insertContentBlock,
-  listContentBlocksByPage,
-  nextContentPosition,
-  toContentBlock,
-} from '../db/content-blocks';
-import { listCommentsByProject } from '../db/comments';
 import { listRepliesByProject } from '../db/replies';
+import type { Env, Variables } from '../env';
+import { aiComplete, extractJson } from '../lib/ai';
+import { aiContentPlanSchema, aiSitemapPlanSchema, orderSitemapPlan } from '../lib/ai-plans';
+import { requireProjectAccess } from '../lib/auth';
+import { badRequest, validateJson } from '../lib/http';
+import { newId } from '../lib/ids';
 
 /** Mounted at /projects/:projectId/ai — AI generation (provider-pluggable). */
 export const aiRoute = new Hono<{ Bindings: Env; Variables: Variables }>();

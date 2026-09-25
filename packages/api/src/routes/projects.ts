@@ -1,12 +1,5 @@
-import { Hono } from 'hono';
-import { validateJson } from '../lib/http';
 import { createProjectInput, updateProjectInput } from '@croquis/shared';
-import type { Env, Variables } from '../env';
-import { requireAdmin, requireProjectAccess } from '../lib/auth';
-import { hashPassword, sha256Hex } from '../lib/crypto';
-import { buildProjectExport } from '../lib/export';
-import { newApiToken, newId, newIngestKey, newShareSlug, slugify } from '../lib/ids';
-import { deleteProjectScreenshots } from '../lib/screenshots';
+import { Hono } from 'hono';
 import {
   deleteProjectCascade,
   getProjectById,
@@ -17,6 +10,13 @@ import {
   toOwnerProject,
   updateProject,
 } from '../db/projects';
+import type { Env, Variables } from '../env';
+import { requireAdmin, requireProjectAccess } from '../lib/auth';
+import { hashPassword, sha256Hex } from '../lib/crypto';
+import { buildProjectExport } from '../lib/export';
+import { validateJson } from '../lib/http';
+import { newApiToken, newId, newIngestKey, newShareSlug, slugify } from '../lib/ids';
+import { deleteProjectScreenshots } from '../lib/screenshots';
 
 export const projectsRoute = new Hono<{ Bindings: Env; Variables: Variables }>();
 
@@ -52,20 +52,25 @@ projectsRoute.get('/:projectId', requireProjectAccess, (c) => {
 });
 
 /** Update a project (owner/admin). */
-projectsRoute.patch('/:projectId', requireProjectAccess, validateJson(updateProjectInput), async (c) => {
-  const input = c.req.valid('json');
-  const project = c.get('project');
-  const update: ProjectUpdate = { updated_at: Date.now() };
-  if (input.name !== undefined) update.name = input.name;
-  if ('share_password' in input) {
-    update.share_password_hash = input.share_password
-      ? await hashPassword(input.share_password)
-      : null;
-  }
-  await updateProject(c.env.DB, project.id, update);
-  const fresh = await getProjectById(c.env.DB, project.id);
-  return c.json(toOwnerProject(fresh ?? project));
-});
+projectsRoute.patch(
+  '/:projectId',
+  requireProjectAccess,
+  validateJson(updateProjectInput),
+  async (c) => {
+    const input = c.req.valid('json');
+    const project = c.get('project');
+    const update: ProjectUpdate = { updated_at: Date.now() };
+    if (input.name !== undefined) update.name = input.name;
+    if ('share_password' in input) {
+      update.share_password_hash = input.share_password
+        ? await hashPassword(input.share_password)
+        : null;
+    }
+    await updateProject(c.env.DB, project.id, update);
+    const fresh = await getProjectById(c.env.DB, project.id);
+    return c.json(toOwnerProject(fresh ?? project));
+  },
+);
 
 /** Delete a project and all its data, including stored screenshots (owner/admin). */
 projectsRoute.delete('/:projectId', requireProjectAccess, async (c) => {

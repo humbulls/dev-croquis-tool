@@ -1,11 +1,11 @@
 import { z } from 'zod';
 import {
-  PAGE_STATUSES,
-  MEMBER_ROLES,
-  CONTENT_BLOCK_TYPES,
   COMMENT_STATUSES,
-  VIEWPORT_KINDS,
+  CONTENT_BLOCK_TYPES,
   FIELD_LIMITS,
+  MEMBER_ROLES,
+  PAGE_STATUSES,
+  VIEWPORT_KINDS,
 } from './constants';
 
 /** Schema format version for AI/JSON exports (semver). */

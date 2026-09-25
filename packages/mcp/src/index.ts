@@ -1,12 +1,12 @@
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { z } from 'zod';
 import {
-  CONTENT_BLOCK_TYPES,
   COMMENT_STATUSES,
+  CONTENT_BLOCK_TYPES,
   formatExportMarkdown,
   PAGE_STATUSES,
 } from '@croquis/shared';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { z } from 'zod';
 import { CroquisClient } from './client';
 
 const baseUrl = process.env.CROQUIS_API_URL;
@@ -69,7 +69,10 @@ server.registerTool(
     description: 'Create a new project (requires an admin token). Returns the API token once.',
     inputSchema: {
       name: z.string(),
-      share_password: z.string().optional().describe('Optional password for the public review link'),
+      share_password: z
+        .string()
+        .optional()
+        .describe('Optional password for the public review link'),
     },
   },
   tool((args) => client.createProject(args)),
@@ -180,7 +183,9 @@ server.registerTool(
     description: 'Mark a review comment as resolved.',
     inputSchema: { projectId: z.string(), commentId: z.string() },
   },
-  tool(({ projectId, commentId }) => client.updateComment(projectId, commentId, { status: 'resolved' })),
+  tool(({ projectId, commentId }) =>
+    client.updateComment(projectId, commentId, { status: 'resolved' }),
+  ),
 );
 
 server.registerTool(

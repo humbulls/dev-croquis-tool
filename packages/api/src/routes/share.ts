@@ -1,10 +1,10 @@
 import { Hono } from 'hono';
-import type { Env, Variables } from '../env';
-import { notFound, unauthorized } from '../lib/http';
-import { getProjectByShareSlug } from '../db/projects';
 import { getCommentById } from '../db/comments';
-import { buildProjectExport } from '../lib/export';
+import { getProjectByShareSlug } from '../db/projects';
+import type { Env, Variables } from '../env';
 import { verifyPassword } from '../lib/crypto';
+import { buildProjectExport } from '../lib/export';
+import { notFound, unauthorized } from '../lib/http';
 import { getScreenshot } from '../lib/screenshots';
 
 /**
@@ -36,7 +36,7 @@ shareRoute.get('/', async (c) => {
 shareRoute.get('/comments/:commentId/screenshot', async (c) => {
   const project = c.get('project');
   const comment = await getCommentById(c.env.DB, project.id, c.req.param('commentId'));
-  if (!comment || !comment.screenshot_key) notFound('Screenshot not found');
+  if (!comment?.screenshot_key) notFound('Screenshot not found');
   const object = await getScreenshot(c.env.BUCKET, comment.screenshot_key);
   if (!object) notFound('Screenshot object missing');
   return new Response(object.body, {

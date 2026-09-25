@@ -1,8 +1,8 @@
-import widgetCss from './widget.css';
 import tokensCss from '@croquis/tokens/tokens.css';
+import { postComment } from './api';
 import type { WidgetConfig } from './config';
 import { collectMetadata, type ElementMetadata } from './metadata';
-import { postComment } from './api';
+import widgetCss from './widget.css';
 
 const MOBILE_MAX_WIDTH = 767;
 const POPOVER_MARGIN = 8;
@@ -68,7 +68,9 @@ export class CroquisWidget {
     this.fab = button('cq-fab', '');
     this.fab.appendChild(el('span', 'cq-fab__dot'));
     const fabText = el('span');
-    fabText.textContent = this.touch ? 'Croquis · tap to comment' : 'Croquis · right-click to comment';
+    fabText.textContent = this.touch
+      ? 'Croquis · tap to comment'
+      : 'Croquis · right-click to comment';
     this.fab.appendChild(fabText);
     this.fab.title = this.touch
       ? 'Tap, then tap the element you want to comment on'
@@ -142,7 +144,9 @@ export class CroquisWidget {
     if (this.tapMode) {
       if (label) label.textContent = 'Now tap/click the element to comment on…';
     } else if (label) {
-      label.textContent = this.touch ? 'Croquis · tap to comment' : 'Croquis · right-click to comment';
+      label.textContent = this.touch
+        ? 'Croquis · tap to comment'
+        : 'Croquis · right-click to comment';
     }
   }
 

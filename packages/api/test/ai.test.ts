@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { extractJson } from '../src/lib/ai';
 import { aiSitemapPlanSchema, orderSitemapPlan } from '../src/lib/ai-plans';
 import { createProject, json, jsonHeaders, request } from './helpers';

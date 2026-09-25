@@ -1,5 +1,5 @@
-import { defineConfig } from 'vitest/config';
 import { cloudflareTest, readD1Migrations } from '@cloudflare/vitest-pool-workers';
+import { defineConfig } from 'vitest/config';
 
 // Read migrations once; applied per test worker in test/apply-migrations.ts.
 const migrations = await readD1Migrations('./migrations');

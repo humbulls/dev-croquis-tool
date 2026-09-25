@@ -117,7 +117,10 @@ export async function listCommentsByProject(
     binds.push(filter.pageId);
   }
   sql += ' ORDER BY created_at DESC';
-  const { results } = await db.prepare(sql).bind(...binds).all<CommentRow>();
+  const { results } = await db
+    .prepare(sql)
+    .bind(...binds)
+    .all<CommentRow>();
   return results;
 }
 

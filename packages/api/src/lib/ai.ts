@@ -94,9 +94,7 @@ export function extractJson(text: string): unknown {
   const fenced = /```(?:json)?\s*([\s\S]*?)```/.exec(candidate);
   if (fenced?.[1]) candidate = fenced[1].trim();
 
-  const starts = ['[', '{']
-    .map((ch) => candidate.indexOf(ch))
-    .filter((index) => index !== -1);
+  const starts = ['[', '{'].map((ch) => candidate.indexOf(ch)).filter((index) => index !== -1);
   if (starts.length === 0) throw new Error('no JSON found in AI response');
   candidate = candidate.slice(Math.min(...starts));
 

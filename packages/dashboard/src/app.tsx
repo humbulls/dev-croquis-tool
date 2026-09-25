@@ -1,8 +1,8 @@
+import type { CreatedProject } from '@croquis/shared';
 import { createContext } from 'preact';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import type { CreatedProject } from '@croquis/shared';
 import { DashboardClient } from './api/client';
-import { clearSession, loadSession, saveSession, type Session } from './lib/session';
+import { clearSession, loadSession, type Session, saveSession } from './lib/session';
 import { ProjectDetail } from './views/ProjectDetail';
 
 interface AppContextValue {
@@ -36,7 +36,10 @@ export function useAsync<T>(fn: () => Promise<T>, deps: unknown[]): AsyncState<T
     setState({ loading: true });
     fn()
       .then((data) => active && setState({ data, loading: false }))
-      .catch((e) => active && setState({ loading: false, error: e instanceof Error ? e.message : String(e) }));
+      .catch(
+        (e) =>
+          active && setState({ loading: false, error: e instanceof Error ? e.message : String(e) }),
+      );
     return () => {
       active = false;
     };
@@ -80,7 +83,9 @@ export function App() {
     <AppContext.Provider value={{ client, notify, disconnect }}>
       <Shell />
       {toast && (
-        <div class={`c-toast ${toast.kind === 'error' ? 'c-toast--error' : ''}`}>{toast.message}</div>
+        <div class={`c-toast ${toast.kind === 'error' ? 'c-toast--error' : ''}`}>
+          {toast.message}
+        </div>
       )}
     </AppContext.Provider>
   );
@@ -106,7 +111,7 @@ function AuthScreen({ onConnect }: { onConnect: (session: Session) => void }) {
       // causes are a wrong URL or a CORS lock (DASHBOARD_ORIGIN mismatch).
       if (e instanceof TypeError) {
         setError(
-          'Could not reach the API. Check the URL, and make sure the API\'s DASHBOARD_ORIGIN allows this dashboard\'s origin.',
+          "Could not reach the API. Check the URL, and make sure the API's DASHBOARD_ORIGIN allows this dashboard's origin.",
         );
       } else {
         setError(e instanceof Error ? e.message : 'Connection failed');
@@ -143,8 +148,17 @@ function AuthScreen({ onConnect }: { onConnect: (session: Session) => void }) {
             placeholder="ADMIN_TOKEN"
           />
         </label>
-        {error && <p class="u-sm" style={{ color: 'var(--cq-color-danger-default)' }}>{error}</p>}
-        <button class="c-btn c-btn--primary" disabled={busy || !token} onClick={connect}>
+        {error && (
+          <p class="u-sm" style={{ color: 'var(--cq-color-danger-default)' }}>
+            {error}
+          </p>
+        )}
+        <button
+          type="button"
+          class="c-btn c-btn--primary"
+          disabled={busy || !token}
+          onClick={connect}
+        >
           {busy ? 'Connecting…' : 'Connect'}
         </button>
       </div>
@@ -165,6 +179,7 @@ function Shell() {
         </div>
         <nav class="c-nav">
           <button
+            type="button"
             class={`c-nav__item ${projectId ? '' : 'c-nav__item--active'}`}
             onClick={() => setProjectId(null)}
           >
@@ -172,7 +187,7 @@ function Shell() {
           </button>
         </nav>
         <div class="u-grow" />
-        <button class="c-btn c-btn--ghost c-btn--sm" onClick={disconnect}>
+        <button type="button" class="c-btn c-btn--ghost c-btn--sm" onClick={disconnect}>
           Disconnect
         </button>
       </aside>
@@ -227,7 +242,12 @@ function ProjectList({ onOpen }: { onOpen: (id: string) => void }) {
               // isComposing guard: Enter that confirms an IME conversion must not submit.
               onKeyDown={(e) => e.key === 'Enter' && !e.isComposing && create()}
             />
-            <button class="c-btn c-btn--primary" disabled={busy || !name.trim()} onClick={create}>
+            <button
+              type="button"
+              class="c-btn c-btn--primary"
+              disabled={busy || !name.trim()}
+              onClick={create}
+            >
               Create
             </button>
           </div>
@@ -240,14 +260,19 @@ function ProjectList({ onOpen }: { onOpen: (id: string) => void }) {
         {data && data.projects.length > 0 && (
           <div class="o-grid">
             {data.projects.map((project) => (
-              <div key={project.id} class="c-card c-card--link o-stack o-stack--tight" onClick={() => onOpen(project.id)}>
+              <button
+                type="button"
+                key={project.id}
+                class="c-card c-card--link o-stack o-stack--tight"
+                onClick={() => onOpen(project.id)}
+              >
                 <span class="c-card__title">{project.name}</span>
                 <span class="c-card__meta u-mono">/{project.slug}</span>
                 <span class="c-card__meta">
                   Share: /share/{project.share_slug}
                   {project.share_password_protected ? ' 🔒' : ''}
                 </span>
-              </div>
+              </button>
             ))}
           </div>
         )}
@@ -281,6 +306,7 @@ function CreatedProjectReveal({
             {row.label}: {row.value}
           </div>
           <button
+            type="button"
             class="c-btn c-btn--sm"
             onClick={async () => {
               try {
@@ -295,7 +321,7 @@ function CreatedProjectReveal({
           </button>
         </div>
       ))}
-      <button class="c-btn c-btn--ghost c-btn--sm" onClick={onDismiss}>
+      <button type="button" class="c-btn c-btn--ghost c-btn--sm" onClick={onDismiss}>
         I saved these — dismiss
       </button>
     </div>

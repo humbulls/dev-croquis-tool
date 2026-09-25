@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { formatExportMarkdown, AI_EXPORT_SCHEMA_VERSION, type ProjectExport } from '../src';
+import { describe, expect, it } from 'vitest';
+import { AI_EXPORT_SCHEMA_VERSION, formatExportMarkdown, type ProjectExport } from '../src';
 
 let seq = 0;
 const nextId = (): string => `00000000-0000-4000-8000-${String(++seq).padStart(12, '0')}`;

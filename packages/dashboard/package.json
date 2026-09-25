@@ -10,8 +10,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "lint": "tsc --noEmit"
+    "test": "vitest run"
   },
   "dependencies": {
     "@croquis/shared": "workspace:*",

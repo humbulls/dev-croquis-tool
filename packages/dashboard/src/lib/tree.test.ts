@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
 import type { Page } from '@croquis/shared';
+import { describe, expect, it } from 'vitest';
 import { buildPageTree, flattenTree } from './tree';
 
 function page(id: string, parentId: string | null, sortIndex: number, path: string): Page {

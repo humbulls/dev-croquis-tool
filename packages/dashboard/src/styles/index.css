@@ -4,9 +4,9 @@
  * scripts/check-hardcoded-css.mjs). Generated tokens are imported first.
  */
 /* Layer precedence is established by import order below (generic … utilities). */
-@import '@croquis/tokens/tokens.css';
-@import './generic.css' layer(generic);
-@import './elements.css' layer(elements);
-@import './objects.css' layer(objects);
-@import './components.css' layer(components);
-@import './utilities.css' layer(utilities);
+@import "@croquis/tokens/tokens.css";
+@import "./generic.css" layer(generic);
+@import "./elements.css" layer(elements);
+@import "./objects.css" layer(objects);
+@import "./components.css" layer(components);
+@import "./utilities.css" layer(utilities);

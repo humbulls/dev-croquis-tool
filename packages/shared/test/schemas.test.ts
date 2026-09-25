@@ -1,13 +1,13 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
-  createProjectInput,
-  createPageInput,
+  AI_EXPORT_SCHEMA_VERSION,
   createCommentInput,
   createCommentReplyInput,
-  projectExportSchema,
-  AI_EXPORT_SCHEMA_VERSION,
-  PAGE_STATUSES,
+  createPageInput,
+  createProjectInput,
   FIELD_LIMITS,
+  PAGE_STATUSES,
+  projectExportSchema,
 } from '../src';
 
 describe('createProjectInput', () => {
@@ -47,7 +47,9 @@ describe('createPageInput', () => {
 
 describe('createCommentInput', () => {
   it('requires a non-empty body and page_url', () => {
-    expect(createCommentInput.safeParse({ page_url: 'https://x.test', body: '' }).success).toBe(false);
+    expect(createCommentInput.safeParse({ page_url: 'https://x.test', body: '' }).success).toBe(
+      false,
+    );
     expect(createCommentInput.safeParse({ page_url: '', body: 'hi' }).success).toBe(false);
   });
 

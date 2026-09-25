@@ -16,8 +16,7 @@
   "scripts": {
     "build": "echo \"@croquis/shared: source package, no build step\"",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "lint": "tsc --noEmit"
+    "test": "vitest run"
   },
   "dependencies": {
     "zod": "^3.25.76"

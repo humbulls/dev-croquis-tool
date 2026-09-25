@@ -1,12 +1,12 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
-  flatten,
+  aliasToPath,
   camelKey,
   cssVarName,
-  isAlias,
-  aliasToPath,
-  resolveCssValue,
+  flatten,
   generate,
+  isAlias,
+  resolveCssValue,
 } from '../src/lib/generate';
 
 describe('helpers', () => {
@@ -41,7 +41,11 @@ describe('flatten', () => {
       },
     });
     expect(flat).toHaveLength(1);
-    expect(flat[0]).toMatchObject({ path: ['color', 'brand', '600'], type: 'color', value: '#4f46e5' });
+    expect(flat[0]).toMatchObject({
+      path: ['color', 'brand', '600'],
+      type: 'color',
+      value: '#4f46e5',
+    });
   });
 });
 

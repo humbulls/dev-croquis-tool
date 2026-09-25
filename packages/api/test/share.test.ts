@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { createProject, json, request } from './helpers';
 
 describe('share (public read-only)', () => {

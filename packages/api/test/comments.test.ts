@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { createProject, json, jsonHeaders, request } from './helpers';
 
 // 1x1 transparent PNG as a data URL.

@@ -15,12 +15,14 @@
     "./tokens.css": "./dist/tokens.css",
     "./css": "./dist/tokens.css"
   },
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "build": "tsx src/cli.ts",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "lint": "tsc --noEmit"
+    "test": "vitest run"
   },
   "devDependencies": {
     "@types/node": "^22.13.0",

@@ -43,7 +43,10 @@ export class CroquisClient {
     }
     if (!res.ok) {
       const message =
-        (data && typeof data === 'object' && 'error' in data && (data as { error: unknown }).error) ||
+        (data &&
+          typeof data === 'object' &&
+          'error' in data &&
+          (data as { error: unknown }).error) ||
         text.slice(0, 200);
       throw new Error(`Croquis API ${res.status}: ${message}`);
     }
@@ -74,7 +77,10 @@ export class CroquisClient {
     return this.request('PATCH', `/projects/${projectId}/pages/${pageId}`, input);
   }
 
-  listContentBlocks(projectId: string, pageId: string): Promise<{ content_blocks: ContentBlock[] }> {
+  listContentBlocks(
+    projectId: string,
+    pageId: string,
+  ): Promise<{ content_blocks: ContentBlock[] }> {
     return this.request('GET', `/projects/${projectId}/pages/${pageId}/content-blocks`);
   }
 
@@ -122,7 +128,10 @@ export class CroquisClient {
   }
 
   // AI generation
-  generateSitemap(projectId: string, brief: string): Promise<{ created: Page[]; skipped_existing: number }> {
+  generateSitemap(
+    projectId: string,
+    brief: string,
+  ): Promise<{ created: Page[]; skipped_existing: number }> {
     return this.request('POST', `/projects/${projectId}/ai/sitemap`, { brief });
   }
   generateContent(

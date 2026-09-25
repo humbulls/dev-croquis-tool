@@ -1,5 +1,5 @@
-import { HTTPException } from 'hono/http-exception';
 import { zValidator } from '@hono/zod-validator';
+import { HTTPException } from 'hono/http-exception';
 import type { z } from 'zod';
 
 /** Throw helpers producing consistent JSON errors (handled in app.onError). */

@@ -41,8 +41,7 @@ export function buildPageTree(pages: Page[]): PageNode[] {
 
   const sortNodes = (nodes: PageNode[]): void => {
     nodes.sort(
-      (a, b) =>
-        a.page.sort_index - b.page.sort_index || a.page.created_at - b.page.created_at,
+      (a, b) => a.page.sort_index - b.page.sort_index || a.page.created_at - b.page.created_at,
     );
   };
   const assignDepth = (nodes: PageNode[], depth: number): void => {

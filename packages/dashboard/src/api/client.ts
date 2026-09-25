@@ -40,7 +40,10 @@ export class DashboardClient {
     }
     if (!res.ok) {
       const message =
-        (data && typeof data === 'object' && 'error' in data && (data as { error: string }).error) ||
+        (data &&
+          typeof data === 'object' &&
+          'error' in data &&
+          (data as { error: string }).error) ||
         (text ? text.slice(0, 200) : `HTTP ${res.status}`);
       throw new Error(String(message));
     }
@@ -79,7 +82,10 @@ export class DashboardClient {
   }
 
   // Content blocks
-  listContentBlocks(projectId: string, pageId: string): Promise<{ content_blocks: ContentBlock[] }> {
+  listContentBlocks(
+    projectId: string,
+    pageId: string,
+  ): Promise<{ content_blocks: ContentBlock[] }> {
     return this.request('GET', `/projects/${projectId}/pages/${pageId}/content-blocks`);
   }
   createContentBlock(

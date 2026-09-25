@@ -1,15 +1,10 @@
-import { Hono } from 'hono';
 import {
   COMMENT_STATUSES,
   type CommentStatus,
   createCommentReplyInput,
   updateCommentInput,
 } from '@croquis/shared';
-import type { Env, Variables } from '../env';
-import { requireProjectAccess } from '../lib/auth';
-import { badRequest, notFound, validateJson } from '../lib/http';
-import { newId } from '../lib/ids';
-import { getPageById } from '../db/pages';
+import { Hono } from 'hono';
 import {
   deleteCommentCascade,
   getCommentById,
@@ -17,7 +12,12 @@ import {
   toComment,
   updateComment,
 } from '../db/comments';
+import { getPageById } from '../db/pages';
 import { insertReply, listRepliesByComment, type ReplyRow, toReply } from '../db/replies';
+import type { Env, Variables } from '../env';
+import { requireProjectAccess } from '../lib/auth';
+import { badRequest, notFound, validateJson } from '../lib/http';
+import { newId } from '../lib/ids';
 import { deleteScreenshot, getScreenshot } from '../lib/screenshots';
 
 /** Mounted at /projects/:projectId/comments */

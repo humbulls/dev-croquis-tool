@@ -1,6 +1,6 @@
 import type { MiddlewareHandler } from 'hono';
-import type { Env, Variables } from '../env';
 import { getProjectById } from '../db/projects';
+import type { Env, Variables } from '../env';
 import { secretsEqual, verifyTokenHash } from './crypto';
 import { notFound, unauthorized } from './http';
 
