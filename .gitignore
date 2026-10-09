@@ -55,3 +55,6 @@ docs/README.md
 e2e/.state/
 test-results/
 playwright-report/
+
+# 1Password reference template (no secret values)
+!.dev.vars.tpl
